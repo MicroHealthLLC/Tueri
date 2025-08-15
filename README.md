@@ -16,7 +16,7 @@ stars](https://img.shields.io/github/stars/protectai/llm-guard.svg?style=social&
 
 ## What is Tueri?
 
-![LLM-Guard](https://github.com/protectai/llm-guard/blob/main/docs/assets/flow.png?raw=true)
+<!-- ![LLM-Guard](https://github.com/protectai/llm-guard/blob/main/docs/assets/flow.png?raw=true) -->
 
 By offering sanitization, detection of harmful language, prevention of data leakage, and resistance against prompt
 injection attacks, LLM-Guard ensures that your interactions with LLMs remain safe and secure.
