@@ -1,0 +1,17 @@
+services:
+  llm_guard_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8000"
+    environment:
+      - AUTH_TOKEN=ijerhg9ueghv98eghr90v8geru9vge9ufvg
+      - LOG_LEVEL=DEBUG
+      - APP_WORKERS=1
+      - SCAN_FAIL_FAST=true
+      # - CACHE_MAX_SIZE=1000
+      # - CACHE_TTL=3600
+    restart: unless-stopped
+    volumes:
+      - ./config/scanners.yml:/home/user/app/config/scanners.yml
