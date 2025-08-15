@@ -2,9 +2,9 @@
 
 Tueri is a comprehensive tool designed to fortify the security of Large Language Models (LLMs).
 
-[**Documentation**](https://protectai.github.io/llm-guard/) | [**Playground**](https://huggingface.co/spaces/ProtectAI/llm-guard-playground) | [**Changelog**](https://protectai.github.io/llm-guard/changelog/)
+<!-- [**Documentation**](https://protectai.github.io/llm-guard/) | [**Playground**](https://huggingface.co/spaces/ProtectAI/llm-guard-playground) | [**Changelog**](https://protectai.github.io/llm-guard/changelog/) -->
 
-[![GitHub
+<!-- [![GitHub
 stars](https://img.shields.io/github/stars/protectai/llm-guard.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/protectai/llm-guard/stargazers/)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -12,7 +12,7 @@ stars](https://img.shields.io/github/stars/protectai/llm-guard.svg?style=social&
 [![Downloads](https://static.pepy.tech/badge/llm-guard)](https://pepy.tech/project/llm-guard)
 [![Downloads](https://static.pepy.tech/badge/llm-guard/month)](https://pepy.tech/project/llm-guard)
 
-<a href="https://mlsecops.com/slack"><img src="https://github.com/protectai/llm-guard/blob/main/docs/assets/join-our-slack-community.png?raw=true" width="200" alt="Join Our Slack Community"></a>
+<a href="https://mlsecops.com/slack"><img src="https://github.com/protectai/llm-guard/blob/main/docs/assets/join-our-slack-community.png?raw=true" width="200" alt="Join Our Slack Community"></a> -->
 
 ## What is Tueri?
 
