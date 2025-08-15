@@ -1,6 +1,6 @@
-# LLM Guard - The Security Toolkit for LLM Interactions
+# Tueri - The Security Toolkit for LLM Interactions
 
-LLM Guard by [Protect AI](https://protectai.com/llm-guard) is a comprehensive tool designed to fortify the security of Large Language Models (LLMs).
+Tueri by [Protect AI](https://protectai.com/llm-guard) is a comprehensive tool designed to fortify the security of Large Language Models (LLMs).
 
 [**Documentation**](https://protectai.github.io/llm-guard/) | [**Playground**](https://huggingface.co/spaces/ProtectAI/llm-guard-playground) | [**Changelog**](https://protectai.github.io/llm-guard/changelog/)
 
@@ -14,7 +14,7 @@ stars](https://img.shields.io/github/stars/protectai/llm-guard.svg?style=social&
 
 <a href="https://mlsecops.com/slack"><img src="https://github.com/protectai/llm-guard/blob/main/docs/assets/join-our-slack-community.png?raw=true" width="200" alt="Join Our Slack Community"></a>
 
-## What is LLM Guard?
+## What is Tueri?
 
 ![LLM-Guard](https://github.com/protectai/llm-guard/blob/main/docs/assets/flow.png?raw=true)
 
@@ -23,7 +23,7 @@ injection attacks, LLM-Guard ensures that your interactions with LLMs remain saf
 
 ## Installation
 
-Begin your journey with LLM Guard by downloading the package:
+Begin your journey with Tueri by downloading the package:
 
 ```sh
 pip install llm-guard
@@ -33,7 +33,7 @@ pip install llm-guard
 
 **Important Notes**:
 
-- LLM Guard is designed for easy integration and deployment in production environments. While it's ready to use
+- Tueri is designed for easy integration and deployment in production environments. While it's ready to use
   out-of-the-box, please be informed that we're constantly improving and updating the repository.
 - Base functionality requires a limited number of libraries. As you explore more advanced features, necessary libraries
   will be automatically installed.
@@ -42,8 +42,8 @@ pip install llm-guard
 
 **Examples**:
 
-- Get started with [ChatGPT and LLM Guard](./examples/openai_api.py).
-- Deploy LLM Guard as [API](https://protectai.github.io/llm-guard/api/overview/)
+- Get started with [ChatGPT and Tueri](./examples/openai_api.py).
+- Deploy Tueri as [API](https://protectai.github.io/llm-guard/api/overview/)
 
 ## Supported scanners
 
@@ -91,7 +91,7 @@ pip install llm-guard
 
 ## Community, Contributing, Docs & Support
 
-LLM Guard is an open source solution.
+Tueri is an open source solution.
 We are committed to a transparent development process and highly appreciate any contributions.
 Whether you are helping us fix bugs, propose new features, improve our documentation or spread the word,
 we would love to have you as part of our community.
@@ -100,7 +100,7 @@ we would love to have you as part of our community.
   it means a lot for open source projects!
 - Read our
   [docs](https://protectai.github.io/llm-guard/)
-  for more info about how to use and customize LLM Guard, and for step-by-step tutorials.
+  for more info about how to use and customize Tueri, and for step-by-step tutorials.
 - Post a [Github
   Issue](https://github.com/protectai/llm-guard/issues) to submit a bug report, feature request, or suggest an improvement.
 - To contribute to the package, check out our [contribution guidelines](CONTRIBUTING.md), and open a PR.
@@ -112,6 +112,6 @@ get help for package usage or contributions, or engage in discussions about LLM 
 
 ### Production Support
 
-We're eager to provide personalized assistance when deploying your LLM Guard to a production environment.
+We're eager to provide personalized assistance when deploying your Tueri to a production environment.
 
 - [Send Email ✉️](mailto:community@protectai.com)
