@@ -2,13 +2,13 @@ import re
 
 import pytest
 
-from llm_guard.exception import LLMGuardValidationError
-from llm_guard.input_scanners.anonymize import (
+from tueri.exception import LLMGuardValidationError
+from tueri.input_scanners.anonymize import (
     ALL_SUPPORTED_LANGUAGES,
     DEFAULT_ENTITY_TYPES,
     Anonymize,
 )
-from llm_guard.input_scanners.anonymize_helpers import (
+from tueri.input_scanners.anonymize_helpers import (
     BERT_BASE_NER_CONF,
     BERT_LARGE_NER_CONF,
     BERT_ZH_NER_CONF,
@@ -17,7 +17,7 @@ from llm_guard.input_scanners.anonymize_helpers import (
     DISTILBERT_AI4PRIVACY_v2_CONF,
     get_regex_patterns,
 )
-from llm_guard.vault import Vault
+from tueri.vault import Vault
 
 _preamble = (
     "In the following prompt, I am going remove certain information and replace each instance with "

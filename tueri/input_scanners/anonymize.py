@@ -7,7 +7,7 @@ from typing import Final
 from presidio_analyzer import RecognizerResult
 from presidio_anonymizer.core.text_replace_builder import TextReplaceBuilder
 
-from llm_guard.input_scanners.anonymize_helpers.ner_mapping import NERConfig
+from tueri.input_scanners.anonymize_helpers.ner_mapping import NERConfig
 
 from ..exception import LLMGuardValidationError
 from ..util import calculate_risk_score, get_logger

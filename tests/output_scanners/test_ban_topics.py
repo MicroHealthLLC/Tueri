@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.output_scanners.ban_topics import BanTopics
+from tueri.output_scanners.ban_topics import BanTopics
 
 
 @pytest.mark.parametrize(

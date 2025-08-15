@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.input_scanners.toxicity import MatchType, Toxicity
+from tueri.input_scanners.toxicity import MatchType, Toxicity
 
 
 @pytest.mark.parametrize(

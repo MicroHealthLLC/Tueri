@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from llm_guard.input_scanners.code import Code as InputCode
-from llm_guard.model import Model
+from tueri.input_scanners.code import Code as InputCode
+from tueri.model import Model
 
 from .base import Scanner
 

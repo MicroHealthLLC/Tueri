@@ -4,8 +4,8 @@ import re
 from enum import Enum
 from typing import TYPE_CHECKING, cast
 
-from llm_guard.util import get_logger, lazy_load_dep
-from llm_guard.vault import Vault
+from tueri.util import get_logger, lazy_load_dep
+from tueri.vault import Vault
 
 from .base import Scanner
 

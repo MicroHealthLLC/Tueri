@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.input_scanners.sentiment import Sentiment
+from tueri.input_scanners.sentiment import Sentiment
 
 
 @pytest.mark.parametrize(

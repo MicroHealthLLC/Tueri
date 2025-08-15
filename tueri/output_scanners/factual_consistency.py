@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from llm_guard.input_scanners.ban_topics import MODEL_DEBERTA_BASE_V2
-from llm_guard.model import Model
-from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification
-from llm_guard.util import calculate_risk_score, device, get_logger, lazy_load_dep
+from tueri.input_scanners.ban_topics import MODEL_DEBERTA_BASE_V2
+from tueri.model import Model
+from tueri.transformers_helpers import get_tokenizer_and_model_for_classification
+from tueri.util import calculate_risk_score, device, get_logger, lazy_load_dep
 
 from .base import Scanner
 

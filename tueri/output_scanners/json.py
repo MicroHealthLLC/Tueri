@@ -3,7 +3,7 @@ import re
 
 import regex
 
-from llm_guard.util import get_logger, lazy_load_dep
+from tueri.util import get_logger, lazy_load_dep
 
 from .base import Scanner
 

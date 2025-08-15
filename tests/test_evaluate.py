@@ -1,9 +1,9 @@
 import pytest
 
-from llm_guard import scan_output, scan_prompt
-from llm_guard.input_scanners import BanSubstrings, TokenLimit
-from llm_guard.input_scanners.ban_substrings import MatchType as BanSubstringsMatchType
-from llm_guard.output_scanners import (
+from tueri import scan_output, scan_prompt
+from tueri.input_scanners import BanSubstrings, TokenLimit
+from tueri.input_scanners.ban_substrings import MatchType as BanSubstringsMatchType
+from tueri.output_scanners import (
     BanTopics,
     Deanonymize,
     Gibberish,
@@ -12,7 +12,7 @@ from llm_guard.output_scanners import (
     Relevance,
     Sensitive,
 )
-from llm_guard.vault import Vault
+from tueri.vault import Vault
 
 
 @pytest.mark.parametrize(

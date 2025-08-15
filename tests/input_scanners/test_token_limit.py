@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.input_scanners.token_limit import TokenLimit
+from tueri.input_scanners.token_limit import TokenLimit
 
 
 @pytest.mark.parametrize(

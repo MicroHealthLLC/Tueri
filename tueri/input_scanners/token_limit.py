@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, cast
 
-from llm_guard.util import get_logger, lazy_load_dep
+from tueri.util import get_logger, lazy_load_dep
 
 from .base import Scanner
 

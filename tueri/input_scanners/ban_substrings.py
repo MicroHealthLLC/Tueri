@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from enum import Enum
 
-from llm_guard.util import get_logger
+from tueri.util import get_logger
 
 from .base import Scanner
 

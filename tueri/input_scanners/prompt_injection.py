@@ -5,9 +5,9 @@ from enum import Enum
 from transformers.tokenization_utils import PreTrainedTokenizer
 from transformers.tokenization_utils_fast import PreTrainedTokenizerFast
 
-from llm_guard.model import Model
-from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
-from llm_guard.util import (
+from tueri.model import Model
+from tueri.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
+from tueri.util import (
     calculate_risk_score,
     get_logger,
     split_text_by_sentences,

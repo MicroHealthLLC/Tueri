@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING, cast
 import numpy as np
 import torch
 
-from llm_guard.model import Model
-from llm_guard.transformers_helpers import get_tokenizer, is_onnx_supported
-from llm_guard.util import calculate_risk_score, device, get_logger, lazy_load_dep
+from tueri.model import Model
+from tueri.transformers_helpers import get_tokenizer, is_onnx_supported
+from tueri.util import calculate_risk_score, device, get_logger, lazy_load_dep
 
 from .base import Scanner
 

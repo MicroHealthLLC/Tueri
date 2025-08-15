@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import re
 
-from llm_guard.model import Model
-from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
-from llm_guard.util import calculate_risk_score, get_logger, remove_markdown
+from tueri.model import Model
+from tueri.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
+from tueri.util import calculate_risk_score, get_logger, remove_markdown
 
 from .base import Scanner
 

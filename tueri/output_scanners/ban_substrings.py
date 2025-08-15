@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from llm_guard.input_scanners.ban_substrings import BanSubstrings as InputBanSubstrings, MatchType
+from tueri.input_scanners.ban_substrings import BanSubstrings as InputBanSubstrings, MatchType
 
 from .base import Scanner
 

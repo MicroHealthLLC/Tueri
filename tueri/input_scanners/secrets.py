@@ -8,7 +8,7 @@ from detect_secrets.core.secrets_collection import SecretsCollection
 from detect_secrets.settings import transient_settings
 from presidio_anonymizer.core.text_replace_builder import TextReplaceBuilder
 
-from llm_guard.util import get_logger
+from tueri.util import get_logger
 
 from .base import Scanner
 

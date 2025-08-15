@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.output_scanners.language_same import LanguageSame
+from tueri.output_scanners.language_same import LanguageSame
 
 
 @pytest.mark.parametrize(

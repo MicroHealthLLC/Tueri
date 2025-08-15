@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.output_scanners.reading_time import ReadingTime
+from tueri.output_scanners.reading_time import ReadingTime
 
 
 @pytest.mark.parametrize(

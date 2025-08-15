@@ -1,4 +1,4 @@
-from llm_guard.util import calculate_risk_score, get_logger, lazy_load_dep
+from tueri.util import calculate_risk_score, get_logger, lazy_load_dep
 
 from .base import Scanner
 

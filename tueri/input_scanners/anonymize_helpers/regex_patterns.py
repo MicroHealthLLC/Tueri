@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TypedDict
 
-from llm_guard.util import get_logger
+from tueri.util import get_logger
 
 LOGGER = get_logger()
 

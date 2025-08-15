@@ -1,4 +1,4 @@
-from llm_guard.util import get_logger
+from tueri.util import get_logger
 
 from .base import Scanner
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from llm_guard.input_scanners.toxicity import MatchType, Toxicity as InputToxicity
-from llm_guard.model import Model
+from tueri.input_scanners.toxicity import MatchType, Toxicity as InputToxicity
+from tueri.model import Model
 
 from .base import Scanner
 

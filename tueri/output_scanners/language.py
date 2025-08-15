@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from llm_guard.input_scanners.language import Language as InputLanguage, MatchType
-from llm_guard.model import Model
+from tueri.input_scanners.language import Language as InputLanguage, MatchType
+from tueri.model import Model
 
 from .base import Scanner
 

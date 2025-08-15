@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.output_scanners.json import JSON
+from tueri.output_scanners.json import JSON
 
 
 @pytest.mark.parametrize(

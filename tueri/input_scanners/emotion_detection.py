@@ -3,9 +3,9 @@ from __future__ import annotations
 from enum import Enum
 from typing import Dict, List
 
-from llm_guard.model import Model
-from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
-from llm_guard.util import calculate_risk_score, get_logger, split_text_by_sentences
+from tueri.model import Model
+from tueri.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
+from tueri.util import calculate_risk_score, get_logger, split_text_by_sentences
 
 from .base import Scanner
 

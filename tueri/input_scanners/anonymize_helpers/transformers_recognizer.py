@@ -7,9 +7,9 @@ from presidio_analyzer import AnalysisExplanation, EntityRecognizer, RecognizerR
 from presidio_analyzer.nlp_engine import NlpArtifacts
 from transformers.pipelines.token_classification import TokenClassificationPipeline
 
-from llm_guard.model import Model
-from llm_guard.transformers_helpers import get_tokenizer_and_model_for_ner
-from llm_guard.util import get_logger, lazy_load_dep, split_text_to_word_chunks
+from tueri.model import Model
+from tueri.transformers_helpers import get_tokenizer_and_model_for_ner
+from tueri.util import get_logger, lazy_load_dep, split_text_to_word_chunks
 
 from .ner_mapping import BERT_BASE_NER_CONF
 

@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.output_scanners.code import Code
+from tueri.output_scanners.code import Code
 
 
 @pytest.mark.parametrize(

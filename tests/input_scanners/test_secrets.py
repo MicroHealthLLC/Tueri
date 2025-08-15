@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.input_scanners.secrets import Secrets
+from tueri.input_scanners.secrets import Secrets
 
 
 @pytest.mark.parametrize(

@@ -2,9 +2,9 @@ from typing import List, Tuple
 
 import pytest
 
-from llm_guard.input_scanners.anonymize import Anonymize
-from llm_guard.output_scanners.deanonymize import Deanonymize, MatchingStrategy
-from llm_guard.vault import Vault
+from tueri.input_scanners.anonymize import Anonymize
+from tueri.output_scanners.deanonymize import Deanonymize, MatchingStrategy
+from tueri.vault import Vault
 
 
 @pytest.mark.parametrize(

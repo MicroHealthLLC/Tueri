@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from llm_guard.input_scanners.regex import MatchType, Regex as InputRegex
+from tueri.input_scanners.regex import MatchType, Regex as InputRegex
 
 from .base import Scanner
 

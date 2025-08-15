@@ -1,6 +1,6 @@
 import pytest
 
-from llm_guard.output_scanners.ban_substrings import OUTPUT_STOP_SUBSTRINGS, BanSubstrings
+from tueri.output_scanners.ban_substrings import OUTPUT_STOP_SUBSTRINGS, BanSubstrings
 
 
 @pytest.mark.parametrize(

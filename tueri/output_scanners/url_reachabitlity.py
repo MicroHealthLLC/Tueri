@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import requests
 
-from llm_guard.util import extract_urls, get_logger
+from tueri.util import extract_urls, get_logger
 
 from .base import Scanner
 

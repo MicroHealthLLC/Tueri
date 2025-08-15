@@ -1,6 +1,6 @@
 from typing import TypedDict
 
-from llm_guard.model import Model
+from tueri.model import Model
 
 
 class NERConfig(TypedDict):

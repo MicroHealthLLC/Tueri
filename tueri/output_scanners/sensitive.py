@@ -2,20 +2,20 @@ from __future__ import annotations
 
 from presidio_anonymizer import AnonymizerEngine
 
-from llm_guard.exception import LLMGuardValidationError
-from llm_guard.input_scanners.anonymize import (
+from tueri.exception import LLMGuardValidationError
+from tueri.input_scanners.anonymize import (
     ALL_SUPPORTED_LANGUAGES,
     DEFAULT_ENTITY_TYPES,
     Anonymize,
 )
-from llm_guard.input_scanners.anonymize_helpers import (
+from tueri.input_scanners.anonymize_helpers import (
     DEBERTA_AI4PRIVACY_v2_CONF,
     get_analyzer,
     get_regex_patterns,
     get_transformers_recognizer,
 )
-from llm_guard.input_scanners.anonymize_helpers.ner_mapping import NERConfig
-from llm_guard.util import calculate_risk_score, get_logger
+from tueri.input_scanners.anonymize_helpers.ner_mapping import NERConfig
+from tueri.util import calculate_risk_score, get_logger
 
 from ..input_scanners.anonymize_helpers.regex_patterns import (
     DefaultRegexPatterns,
