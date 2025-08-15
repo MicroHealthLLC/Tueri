@@ -1,6 +1,6 @@
 # Tueri - The Security Toolkit for LLM Interactions
 
-Tueri by [Protect AI](https://protectai.com/llm-guard) is a comprehensive tool designed to fortify the security of Large Language Models (LLMs).
+Tueri is a comprehensive tool designed to fortify the security of Large Language Models (LLMs).
 
 [**Documentation**](https://protectai.github.io/llm-guard/) | [**Playground**](https://huggingface.co/spaces/ProtectAI/llm-guard-playground) | [**Changelog**](https://protectai.github.io/llm-guard/changelog/)
 
