@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', credentialsID: 'JenkinsGithub',
+                git branch: 'main', credentialsId: 'JenkinsGithub',
                 url: 'https://github.com/MicroHealthLLC/Tueri.git'
             }
         }
