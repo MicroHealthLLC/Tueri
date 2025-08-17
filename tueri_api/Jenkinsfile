@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        docker build -t ${ECR_REGISTRY}/tueri:latest .
+                        cd tueri_api && docker build -t ${ECR_REGISTRY}/tueri:latest .
                     """
                 }
             }
