@@ -1,0 +1,55 @@
+pipeline {
+    agent { label 'docker-agent' }
+    
+    environment {
+        AWS_CREDENTIALS = credentials('aws-ecr-creds')  // Add AWS credentials in Jenkins
+        AWS_REGION = 'us-east-1'  // Replace with your AWS region
+        ECR_REGISTRY = 'public.ecr.aws/j5k9n1u6/tueri'  // Replace with your ECR registry URL
+        TG_SERVICE_JSON = credentials('tg-service-json')
+    }
+    
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', credentialsID: 'JenkinsGithub',
+                url: 'https://github.com/MicroHealthLLC/Tueri.git'
+            }
+        }
+        stage('Login to AWS ECR') {
+            steps {
+                script {
+                    sh """
+                        aws ecr get-login-password -region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+                    """
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh """
+                        docker build -t ${ECR_REGISTRY}:latest .
+                    """
+                }
+            }
+        }
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
+                    sh """
+                        docker push ${ECR_REGISTRY}:latest
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully'
+        }
+        failure {
+            echo 'Pipeline execution failed'
+        }
+    }
+}
