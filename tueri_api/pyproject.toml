@@ -2,7 +2,7 @@
 name = "tueri-api"
 description = "Tueri API is a deployment of Tueri as an API."
 authors = [
-  { name = "MicroHealth LLC"", email = "x@microhealthllc.com"}
+  { name = "MicroHealth LLC", email = "x@microhealthllc.com"}
 ]
 readme = "README.md"
 dynamic = ["version"]
