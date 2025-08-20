@@ -25,7 +25,7 @@ are present in the output.
 ## Usage
 
 ```python
-from llm_guard.output_scanners import JSON
+from tueri.output_scanners import JSON
 
 scanner = JSON(required_elements=1)
 sanitized_output, is_valid, risk_score = scanner.scan(prompt, model_output)

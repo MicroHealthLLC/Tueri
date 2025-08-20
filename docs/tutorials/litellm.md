@@ -1,6 +1,6 @@
-# Apply LLM Guard Content Mod across 100+ LLMs w/ LiteLLM
+# Apply Tueri Content Mod across 100+ LLMs w/ LiteLLM
 
-Use LLM Guard with LiteLLM Proxy to moderate calls across Anthropic/Bedrock/Gemini/etc. LLMs with [LiteLLM](https://github.com/BerriAI/litellm)
+Use Tueri with LiteLLM Proxy to moderate calls across Anthropic/Bedrock/Gemini/etc. LLMs with [LiteLLM](https://github.com/BerriAI/litellm)
 
 
 LiteLLM currently supports requests in:
@@ -12,20 +12,20 @@ LiteLLM currently supports requests in:
 
 ## Pre-Requisites
 - Install litellm proxy - `pip install 'litellm[proxy]'`
-- Setup [LLM Guard Docker](../api/deployment.md#from-docker)
+- Setup [Tueri Docker](../api/deployment.md#from-docker)
 
 ## Quick Start
 
-Let's add LLM Guard content mod for Anthropic API calls
+Let's add Tueri content mod for Anthropic API calls
 
-Set the LLM Guard API Base in your environment
+Set the Tueri API Base in your environment
 
 ```bash
-export LLM_GUARD_API_BASE="http://0.0.0.0:8192" # deployed llm guard api
+export TUERI_API_BASE="http://0.0.0.0:8192" # deployed Tueri api
 export ANTHROPIC_API_KEY="sk-..." # anthropic api key
 ```
 
-Add `llmguard_moderations` as a callback in a config.yaml
+Add `tueri_moderations` as a callback in a config.yaml
 
 ```yaml
 model_list:
@@ -36,7 +36,7 @@ model_list:
 
 
 litellm_settings:
-    callbacks: ["llmguard_moderations"]
+    callbacks: ["tueri_moderations"]
 ```
 
 Now you can easily test it:
@@ -47,12 +47,12 @@ litellm --config /path/to/config.yaml
 
 - Make a regular /chat/completion call
 
-- Check your proxy logs for any statement with `LLM Guard:`
+- Check your proxy logs for any statement with `Tueri:`
 
 Expected results:
 
 ```bash
-LLM Guard: Received response - {"sanitized_prompt": "hello world", "is_valid": true, "scanners": { "Regex": 0.0 }}
+Tueri: Received response - {"sanitized_prompt": "hello world", "is_valid": true, "scanners": { "Regex": 0.0 }}
 ```
 ### Turn on/off per key
 
@@ -67,8 +67,8 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 
 litellm_settings:
-    callbacks: ["llmguard_moderations"]
-    llm_guard_mode: "key-specific"
+    callbacks: ["tueri_moderations"]
+    tueri_mode: "key-specific"
 
 general_settings:
     database_url: "postgres://.." # postgres db url
@@ -84,7 +84,7 @@ curl --location 'http://localhost:4000/key/generate' \
 --data '{
     "models": ["claude-3.5-sonnet"],
     "permissions": {
-        "enable_llm_guard_check": true # 👈 KEY CHANGE
+        "enable_tueri_check": true # 👈 KEY CHANGE
     }
 }'
 
@@ -109,8 +109,8 @@ curl --location 'http://0.0.0.0:4000/v1/chat/completions' \
 **1. Update config**
 ```yaml
 litellm_settings:
-    callbacks: ["llmguard_moderations"]
-    llm_guard_mode: "request-specific"
+    callbacks: ["tueri_moderations"]
+    tueri_mode: "request-specific"
 ```
 
 **2. Create new key**
@@ -149,7 +149,7 @@ response = client.chat.completions.create(
     extra_body={ # pass in any provider-specific param, if not supported by openai, https://docs.litellm.ai/docs/completion/input#provider-specific-params
         "metadata": {
             "permissions": {
-                "enable_llm_guard_check": True # 👈 KEY CHANGE
+                "enable_tueri_check": True # 👈 KEY CHANGE
             },
         }
     }

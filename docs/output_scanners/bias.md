@@ -24,8 +24,8 @@ predefined threshold, the scanner determines whether it's biased.
 ## Usage
 
 ```python
-from llm_guard.output_scanners import Bias
-from llm_guard.output_scanners.bias import MatchType
+from tueri.output_scanners import Bias
+from tueri.output_scanners.bias import MatchType
 
 scanner = Bias(threshold=0.5, match_type=MatchType.FULL)
 sanitized_output, is_valid, risk_score = scanner.scan(prompt, model_output)

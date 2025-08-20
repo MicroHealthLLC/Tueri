@@ -33,8 +33,8 @@ arabic (ar), bulgarian (bg), german (de), modern greek (el), english (en), spani
 ## Usage
 
 ```python
-from llm_guard.input_scanners import Language
-from llm_guard.input_scanners.language import MatchType
+from tueri.input_scanners import Language
+from tueri.input_scanners.language import MatchType
 
 scanner = Language(valid_languages=["en"], match_type=MatchType.FULL)  # Add other valid language codes (ISO 639-1) as needed
 sanitized_prompt, is_valid, risk_score = scanner.scan(prompt)
