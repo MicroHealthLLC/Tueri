@@ -35,7 +35,7 @@ class MetricsConfig(BaseModel):
 
 
 class AppConfig(BaseModel):
-    name: Optional[str] = Field(default="LLM Guard API")
+    name: Optional[str] = Field(default="Tueri API")
     log_level: Optional[str] = Field(default="INFO")
     log_json: Optional[bool] = Field(default=False)
     scan_fail_fast: Optional[bool] = Field(default=False)

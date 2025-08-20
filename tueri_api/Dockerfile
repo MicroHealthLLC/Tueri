@@ -1,9 +1,8 @@
 # Use the Python 3.12 slim image
 FROM python:3.12-slim
 
-LABEL org.opencontainers.image.source=https://github.com/protectai/llm-guard
-LABEL org.opencontainers.image.description="LLM Guard API"
-LABEL org.opencontainers.image.licenses=MIT
+LABEL org.opencontainers.image.source=https://github.com/MicroHealthLLC/Tueri
+LABEL org.opencontainers.image.description="Tueri API"
 
 # Install system packages needed for building
 RUN apt-get update && apt-get install -y --no-install-recommends \

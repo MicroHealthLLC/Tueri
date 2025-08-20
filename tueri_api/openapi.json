@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "LLM Guard API",
-    "description": "API to run LLM Guard scanners.",
+    "title": "Tueri",
+    "description": "API to run Tueri scanners.",
     "version": "0.0.10"
   },
   "paths": {

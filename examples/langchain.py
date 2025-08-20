@@ -9,26 +9,26 @@ from langchain.schema.messages import BaseMessage
 logger = logging.getLogger(__name__)
 
 try:
-    import llm_guard
+    import tueri
 except ImportError:
     raise ModuleNotFoundError(
-        "Could not import llm-guard python package. Please install it with `pip install llm-guard`."
+        "Could not import tueri python package."
     )
 
 
-class LLMGuardPromptException(Exception):
-    """Exception to raise when llm-guard marks prompt invalid."""
+class TueriPromptException(Exception):
+    """Exception to raise when tueri marks prompt invalid."""
 
 
-class LLMGuardPromptChain(Chain):
+class TueriPromptChain(Chain):
     scanners: Dict[str, Dict] = {}
     """The scanners to use."""
     scanners_ignore_errors: List[str] = []
     """The scanners to ignore if they throw errors."""
-    vault: Optional[llm_guard.vault.Vault] = None
+    vault: Optional[tueri.vault.Vault] = None
     """The scanners to ignore errors from."""
     raise_error: bool = True
-    """Whether to raise an error if the LLMGuard marks the prompt invalid."""
+    """Whether to raise an error if Tueri marks the prompt invalid."""
 
     input_key: str = "input"  #: :meta private:
     output_key: str = "sanitized_input"  #: :meta private:
@@ -47,7 +47,7 @@ class LLMGuardPromptChain(Chain):
                             including the initialized scanners.
 
         Raises:
-            ValueError: If there is an issue importing 'llm-guard' or loading scanners.
+            ValueError: If there is an issue importing 'tueri' or loading scanners.
         """
 
         if values.get("initialized_scanners") is not None:
@@ -61,7 +61,7 @@ class LLMGuardPromptChain(Chain):
                         scanner_config["vault"] = values["vault"]
 
                     values["initialized_scanners"].append(
-                        llm_guard.input_scanners.get_scanner_by_name(scanner_name, scanner_config)
+                        tueri.input_scanners.get_scanner_by_name(scanner_name, scanner_config)
                     )
 
             return values
@@ -128,7 +128,7 @@ class LLMGuardPromptChain(Chain):
             return  # ignore error, keep scanning
 
         if self.raise_error:
-            raise LLMGuardPromptException(
+            raise TueriPromptException(
                 f"This prompt was determined as invalid based on configured policies with risk score {risk_score}"
             )
 
@@ -160,10 +160,10 @@ class LLMGuardPromptChain(Chain):
             Dict[str, str]: A dictionary containing the processed output.
 
         Raises:
-            LLMGuardPromptException: If there is an error during the scanning process
+            TueriPromptException: If there is an error during the scanning process
         """
         if run_manager:
-            run_manager.on_text("Running LLMGuardPromptChain...\n")
+            run_manager.on_text("Running TueriPromptChain...\n")
 
         sanitized_prompt = inputs[self.input_keys[0]]
         for scanner in self.initialized_scanners:
@@ -173,11 +173,11 @@ class LLMGuardPromptChain(Chain):
         return {self.output_key: sanitized_prompt}
 
 
-class LLMGuardOutputException(Exception):
-    """Exception to raise when llm-guard marks output invalid."""
+class TueriOutputException(Exception):
+    """Exception to raise when tueri marks output invalid."""
 
 
-class LLMGuardOutputChain(BaseModel):
+class TueriOutputChain(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
@@ -185,10 +185,10 @@ class LLMGuardOutputChain(BaseModel):
     """The scanners to use."""
     scanners_ignore_errors: List[str] = []
     """The scanners to ignore if they throw errors."""
-    vault: Optional[llm_guard.vault.Vault] = None
+    vault: Optional[tueri.vault.Vault] = None
     """The scanners to ignore errors from."""
     raise_error: bool = True
-    """Whether to raise an error if the LLMGuard marks the output invalid."""
+    """Whether to raise an error if the Tueri marks the output invalid."""
 
     initialized_scanners: List[Any] = []  #: :meta private:
 
@@ -205,7 +205,7 @@ class LLMGuardOutputChain(BaseModel):
                             including the initialized scanners.
 
         Raises:
-            ValueError: If there is an issue importing 'llm-guard' or loading scanners.
+            ValueError: If there is an issue importing 'tueri' or loading scanners.
         """
 
         if values.get("initialized_scanners") is not None:
@@ -219,7 +219,7 @@ class LLMGuardOutputChain(BaseModel):
                         scanner_config["vault"] = values["vault"]
 
                     values["initialized_scanners"].append(
-                        llm_guard.output_scanners.get_scanner_by_name(scanner_name, scanner_config)
+                        tueri.output_scanners.get_scanner_by_name(scanner_name, scanner_config)
                     )
 
             return values
@@ -245,7 +245,7 @@ class LLMGuardOutputChain(BaseModel):
             return  # ignore error, keep scanning
 
         if self.raise_error:
-            raise LLMGuardOutputException(
+            raise TueriOutputException(
                 f"This output was determined as invalid based on configured policies with risk score {risk_score}"
             )
 
@@ -285,10 +285,10 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-vault = llm_guard.vault.Vault()
+vault = tueri.vault.Vault()
 use_onnx = True
 
-llm_guard_prompt_scanner = LLMGuardPromptChain(
+tueri_prompt_scanner = TueriPromptChain(
     vault=vault,
     scanners={
         "Anonymize": {"use_faker": True, "use_onnx": use_onnx},
@@ -317,7 +317,7 @@ llm_guard_prompt_scanner = LLMGuardPromptChain(
     ],  # These scanners redact, so I can skip them from failing the prompt
 )
 
-llm_guard_output_scanner = LLMGuardOutputChain(
+tueri_output_scanner = TueriOutputChain(
     vault=vault,
     scanners={
         "BanSubstrings": {
@@ -356,11 +356,11 @@ input_prompt = "Make an SQL insert statement to add a new user to our database. 
 "the IP address is 192.168.1.100. And credit card number is 4567-8901-2345-6789. "
 "He works in Test LLC."
 guarded_chain = (
-    llm_guard_prompt_scanner  # scan input here
+    tueri_prompt_scanner  # scan input here
     | prompt
     | llm
     | (
-        lambda ai_message: llm_guard_output_scanner.scan(input_prompt, ai_message)
+        lambda ai_message: tueri_output_scanner.scan(input_prompt, ai_message)
     )  # scan output here and deanonymize
     | StrOutputParser()
 )

@@ -1,2 +1,2 @@
-class LLMGuardValidationError(ValueError):
+class TueriValidationError(ValueError):
     pass

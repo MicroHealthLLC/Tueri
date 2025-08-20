@@ -1,6 +1,6 @@
 [project]
-name = "llm-guard"
-description = "LLM-Guard is a comprehensive tool designed to fortify the security of Large Language Models (LLMs). By offering sanitization, detection of harmful language, prevention of data leakage, and resistance against prompt injection attacks, LLM-Guard ensures that your interactions with LLMs remain safe and secure."
+name = "tueri"
+description = "Tueri is a comprehensive tool designed to fortify the security of Large Language Models (LLMs). By offering sanitization, detection of harmful language, prevention of data leakage, and resistance against prompt injection attacks, LLM-Guard ensures that your interactions with LLMs remain safe and secure."
 authors = [
   { name = "Protect AI", email = "community@protectai.com"}
 ]
@@ -60,11 +60,9 @@ dev = [
 ]
 
 [project.urls]
-homepage = "https://github.com/protectai/llm-guard"
-documentation = "https://protectai.github.io/llm-guard/"
-repository = "https://github.com/protectai/llm-guard"
-issues = "https://github.com/protectai/llm-guard/issues"
-changelog = "https://protectai.github.io/llm-guard/changelog/"
+homepage = "https://github.com/MicroHealthLLC/Tueri"
+documentation = "https://github.com/MicroHealthLLC/Tueri"
+repository = "https://github.com/MicroHealthLLC/Tueri"
 
 [tool.setuptools]
 packages = {find = {where=["."], include=["llm_guard", "llm_guard.*"]}}

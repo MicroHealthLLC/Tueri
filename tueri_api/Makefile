@@ -3,7 +3,7 @@
 ### --------------------------------------------------------------------------------------------------------------------
 
 # Docker config
-DOCKER_IMAGE_NAME=laiyer/llm-guard-api
+DOCKER_IMAGE_NAME=laiyer/tueri
 VERSION=0.3.16
 
 # Other config

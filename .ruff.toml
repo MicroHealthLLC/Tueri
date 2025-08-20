@@ -1,7 +1,7 @@
 extend-include = ["*.ipynb"]
 line-length = 100
 src = [
-    "llm_guard",
+    "tueri",
     "tests",
 ]
 exclude = ["examples/google_gemini.py"]

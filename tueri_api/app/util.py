@@ -6,7 +6,7 @@ from typing import Dict, Literal, TextIO
 import psutil
 import structlog
 
-from llm_guard.util import configure_logger as configure_llm_guard_logger
+from tueri.util import configure_logger as configure_tueri_logger
 
 LOG_LEVELS = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 EXTERNAL_LOGGERS = {
@@ -68,7 +68,7 @@ def configure_logger(
     for log_name in EXTERNAL_LOGGERS:
         logging.getLogger(log_name).setLevel(logging.WARNING)
 
-    configure_llm_guard_logger(log_level, render_json, stream)
+    configure_tueri_logger(log_level, render_json, stream)
 
 
 def get_resource_utilization() -> Dict:

@@ -3,12 +3,12 @@
     "build"
   ],
   "include": [
-    "llm_guard",
+    "tueri",
     "tests"
   ],
   "ignore": [
     "benchmarks",
     "examples",
-    "llm_guard_api"
+    "tueri_api"
   ]
 }

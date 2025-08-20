@@ -1,5 +1,5 @@
 services:
-  llm_guard_api:
+  tueri_api:
     build:
       context: .
       dockerfile: Dockerfile
