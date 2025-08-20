@@ -1,8 +1,8 @@
 [project]
-name = "llm-guard-api"
-description = "LLM Guard API is a deployment of LLM Guard as an API."
+name = "tueri-api"
+description = "Tueri API is a deployment of Tueri as an API."
 authors = [
-  { name = "Protect AI", email = "community@protectai.com"}
+  { name = "MicroHealth LLC", email = "x@microhealthllc.com"}
 ]
 readme = "README.md"
 dynamic = ["version"]

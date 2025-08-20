@@ -1,5 +1,5 @@
 app:
-  name: ${APP_NAME:LLM Guard API}
+  name: ${APP_NAME:Tueri API}
   log_level: ${LOG_LEVEL:INFO}
   log_json: ${LOG_JSON:true}
   scan_fail_fast: ${SCAN_FAIL_FAST:false}
@@ -169,7 +169,7 @@ output_scanners:
       model_max_length: 256
 
 # app:
-#   name: ${APP_NAME:LLM Guard API}
+#   name: ${APP_NAME:Tueri API}
 #   log_level: ${LOG_LEVEL:INFO}
 #   log_json: ${LOG_JSON:true}
 #   scan_fail_fast: ${SCAN_FAIL_FAST:true}

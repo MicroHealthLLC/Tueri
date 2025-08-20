@@ -1,4 +1,4 @@
-# Installing LLM Guard
+# Installing Tueri
 
 ## Prerequisites
 

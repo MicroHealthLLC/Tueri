@@ -29,7 +29,7 @@ However, that doesn't always lead to better latency but can reduce the model siz
 To minimize CPU and memory usage:
 
 ```python
-from llm_guard.input_scanners.code import Code, DEFAULT_MODEL
+from tueri.input_scanners.code import Code, DEFAULT_MODEL
 
 DEFAULT_MODEL.kwargs["low_cpu_mem_usage"] = True
 scanner = Code(languages=["PHP"], model=DEFAULT_MODEL)
@@ -58,4 +58,4 @@ torch._inductor.config.fx_graph_cache = True
 
 ## Streaming mode
 
-To optimize the output scanning, you can analyze the output in chunks. In [OpenAI](./openai.md) guide, we demonstrate how to use LLM Guard to protect OpenAI client with streaming.
+To optimize the output scanning, you can analyze the output in chunks. In [OpenAI](./openai.md) guide, we demonstrate how to use Tueri to protect OpenAI client with streaming.

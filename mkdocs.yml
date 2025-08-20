@@ -97,7 +97,7 @@ extra:
 
 nav:
   - Get Started:
-    - Index: index.md
+    # Index: index.md (removed)
     - Installation: get_started/installation.md
     - Quickstart: get_started/quickstart.md
     - Playground: get_started/playground.md

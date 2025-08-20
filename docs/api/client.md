@@ -8,10 +8,10 @@
     import os
     import requests
 
-    LLM_GUARD_API_KEY = os.environ.get("LLM_GUARD_API_KEY")
-    LLM_GUARD_BASE_URL = os.environ.get("LLM_GUARD_URL")
+    TUERI_API_KEY = os.environ.get("TUERI_API_KEY")
+    TUERI_BASE_URL = os.environ.get("TUERI_URL")
 
-    class LLMGuardMaliciousPromptException(Exception):
+    class TueriMaliciousPromptException(Exception):
         scores = {}
 
         def __init__(self, *args, **kwargs):
@@ -21,34 +21,34 @@
         def __str__(self):
             scanners = [scanner for scanner, score in self.scores.items() if score > 0]
 
-            return f"LLM Guard detected a malicious prompt. Scanners triggered: {', '.join(scanners)}; scores: {self.scores}"
+            return f"Tueri detected a malicious prompt. Scanners triggered: {', '.join(scanners)}; scores: {self.scores}"
 
 
-    class LLMGuardRequestException(Exception):
+    class TueriRequestException(Exception):
         pass
 
-    def request_llm_guard_prompt(prompt: str):
+    def request_tueri_prompt(prompt: str):
         try:
             response = requests.post(
-                url=f"{LLM_GUARD_BASE_URL}/analyze/prompt",
+                url=f"{TUERI_BASE_URL}/analyze/prompt",
                 json={"prompt": prompt},
                 headers={
                     "Content-Type": "application/json",
-                    "Authorization": f"Bearer {LLM_GUARD_API_KEY}",
+                    "Authorization": f"Bearer {TUERI_API_KEY}",
                 },
             )
 
             response_json = response.json()
         except requests.RequestException as err:
-            raise LLMGuardRequestException(err)
+            raise TueriRequestException(err)
 
         if not response_json["is_valid"]:
-            raise LLMGuardMaliciousPromptException(scores=response_json["scanners"])
+            raise TueriMaliciousPromptException(scores=response_json["scanners"])
 
         return response_json["sanitized_prompt"]
 
     prompt = "Write a Python function to calculate the factorial of a number."
-    sanitized_prompt = request_llm_guard_prompt(prompt)
+    sanitized_prompt = request_TUERI_prompt(prompt)
     print(sanitized_prompt)
     ```
 
@@ -60,14 +60,14 @@
     import aiohttp
     from openai import AsyncOpenAI
 
-    LLM_GUARD_API_KEY = os.environ.get("LLM_GUARD_API_KEY")
-    LLM_GUARD_BASE_URL = os.environ.get("LLM_GUARD_URL")
+    TUERI_API_KEY = os.environ.get("TUERI_API_KEY")
+    TUERI_BASE_URL = os.environ.get("TUERI_URL")
     openai_client = AsyncOpenAI(
         api_key=os.environ.get("OPENAI_API_KEY"),
     )
     system_prompt = "You are a Python tutor."
 
-    class LLMGuardMaliciousPromptException(Exception):
+    class TueriMaliciousPromptException(Exception):
         scores = {}
 
         def __init__(self, *args, **kwargs):
@@ -80,7 +80,7 @@
             return f"LLM Guard detected a malicious prompt. Scanners triggered: {', '.join(scanners)}; scores: {self.scores}"
 
 
-    class LLMGuardRequestException(Exception):
+    class TueriRequestException(Exception):
         pass
 
     async def request_openai(prompt: str) -> str:
@@ -98,15 +98,15 @@
         return chat_completion.choices[0].message.content
 
 
-    async def request_llm_guard_prompt(prompt: str):
+    async def request_tueri_prompt(prompt: str):
         async with aiohttp.ClientSession() as session:
             try:
                 response = await session.post(
-                    url=f"{LLM_GUARD_BASE_URL}/analyze/prompt",
+                    url=f"{TUERI_BASE_URL}/analyze/prompt",
                     json={"prompt": prompt},
                     headers={
                         "Content-Type": "application/json",
-                        "Authorization": f"Bearer {LLM_GUARD_API_KEY}",
+                        "Authorization": f"Bearer {TUERI_API_KEY}",
                     },
                     ssl=False,
                     raise_for_status=True,
@@ -114,14 +114,14 @@
 
                 response_json = await response.json()
             except Exception as e:
-                raise LLMGuardRequestException(e)
+                raise TueriRequestException(e)
 
             if not response_json["is_valid"]:
-                raise LLMGuardMaliciousPromptException(scores=response_json["scanners"])
+                raise TueriMaliciousPromptException(scores=response_json["scanners"])
 
     async def generate_completion(prompt: str) -> str:
         result = await asyncio.gather(
-            request_llm_guard_prompt(prompt),
+            request_tueri_prompt(prompt),
             request_openai(prompt),
         )
 

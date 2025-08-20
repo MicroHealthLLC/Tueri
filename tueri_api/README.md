@@ -1,3 +1,3 @@
 # Tueri API
 
-[Documentation](https://protectai.github.io/llm-guard/api/overview/)
+[Documentation](https://github.com/MicroHealthLLC/Tueri)

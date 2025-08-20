@@ -25,9 +25,9 @@ generation_model = GenerativeModel("gemini-pro")
 gemini_pro_vision_model = GenerativeModel("gemini-pro-vision")
 
 # Import Scanners from LLM Guard
-from llm_guard import scan_output, scan_prompt
-from llm_guard.input_scanners import PromptInjection, TokenLimit, Toxicity
-from llm_guard.output_scanners import NoRefusal, Relevance, Sensitive
+from tueri import scan_output, scan_prompt
+from tueri.input_scanners import PromptInjection, TokenLimit, Toxicity
+from tueri.output_scanners import NoRefusal, Relevance, Sensitive
 
 # Give a prompt
 prompt = """ #What is Sundar's email?#"""

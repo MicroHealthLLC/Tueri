@@ -23,10 +23,10 @@ from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from llm_guard import scan_output, scan_prompt
-from llm_guard.input_scanners.base import Scanner as InputScanner
-from llm_guard.output_scanners.base import Scanner as OutputScanner
-from llm_guard.vault import Vault
+from tueri import scan_output, scan_prompt
+from tueri.input_scanners.base import Scanner as InputScanner
+from tueri.output_scanners.base import Scanner as OutputScanner
+from tueri.vault import Vault
 
 from .config import AuthConfig, Config, get_config
 from .otel import configure_otel, instrument_app
@@ -75,7 +75,7 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title=config.app.name,
-        description="API to run LLM Guard scanners.",
+        description="API to run Tueri scanners.",
         debug=is_debug,
         version=__version__,
         openapi_url="/openapi.json" if is_debug else None,  # hide docs in production
@@ -183,7 +183,7 @@ def register_routes(
     @app.get("/", tags=["Main"])
     @limiter.exempt
     async def read_root():
-        return {"name": "LLM Guard API"}
+        return {"name": "Tueri API"}
 
     @app.get("/healthz", tags=["Health"])
     @limiter.exempt

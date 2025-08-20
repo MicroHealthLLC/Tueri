@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from tueri.exception import LLMGuardValidationError
+from tueri.exception import TueriValidationError
 from tueri.model import Model
 from tueri.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
 from tueri.util import calculate_risk_score, get_logger
@@ -83,10 +83,10 @@ class Code(Scanner):
             use_onnx: Whether to use ONNX for inference. Default is False.
 
         Raises:
-            LLMGuardValidationError: If the languages are not a subset of SUPPORTED_LANGUAGES.
+            TueriValidationError: If the languages are not a subset of SUPPORTED_LANGUAGES.
         """
         if not set(languages).issubset(set(SUPPORTED_LANGUAGES)):
-            raise LLMGuardValidationError(f"Languages must be a subset of {SUPPORTED_LANGUAGES}")
+            raise TueriValidationError(f"Languages must be a subset of {SUPPORTED_LANGUAGES}")
 
         self._languages = languages
         self._is_blocked = is_blocked

@@ -31,20 +31,15 @@ prompt, making it more sophisticated.
     As specified by the `OWASP Top 10 LLM attacks`, this vulnerability is categorized
     under: [LLM08: Excessive Agency](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
 
-### 2. Prevent harmful substrings in the model's output
-
-There is also a dataset prepared of harmful substrings for
-prompts: [output_stop_substrings.json](https://github.com/protectai/llm-guard/blob/main/llm_guard/resources/output_stop_substrings.json)
-
-### 3. Hide mentions of competitors
+### 2. Hide mentions of competitors
 
 List all competitor names and pass them to the scanner. It will replace all competitor names with `[REDACT]` in the model's output.
 
 ## Usage
 
 ```python
-from llm_guard.output_scanners import BanSubstrings
-from llm_guard.input_scanners.ban_substrings import MatchType
+from tueri.output_scanners import BanSubstrings
+from tueri.input_scanners.ban_substrings import MatchType
 
 scanner = BanSubstrings(
   substrings=["forbidden", "unwanted"],
