@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from presidio_anonymizer import AnonymizerEngine
 
-from tueri.exception import LLMGuardValidationError
+from tueri.exception import TueriValidationError
 from tueri.input_scanners.anonymize import (
     ALL_SUPPORTED_LANGUAGES,
     DEFAULT_ENTITY_TYPES,
@@ -58,7 +58,7 @@ class Sensitive(Scanner):
            use_onnx (bool): Use ONNX model for inference. Default is False.
         """
         if language not in ALL_SUPPORTED_LANGUAGES:
-            raise LLMGuardValidationError(
+            raise TueriValidationError(
                 f"Language must be in the list of allowed: {ALL_SUPPORTED_LANGUAGES}"
             )
 

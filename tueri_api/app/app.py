@@ -71,8 +71,7 @@ def create_app() -> FastAPI:
     output_scanners_func = _get_output_scanners_function(config, vault)
 
     if config.app.scan_fail_fast:
-        LOGGER.debug("Scan fail_fast mode is enabled")
-
+        LOGGER.debug("Scan fail_fast mode is enabled")  
     app = FastAPI(
         title=config.app.name,
         description="API to run Tueri scanners.",

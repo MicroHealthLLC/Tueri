@@ -2,7 +2,7 @@ import re
 
 import pytest
 
-from tueri.exception import LLMGuardValidationError
+from tueri.exception import TueriValidationError
 from tueri.input_scanners.anonymize import (
     ALL_SUPPORTED_LANGUAGES,
     DEFAULT_ENTITY_TYPES,
@@ -314,7 +314,7 @@ def test_scan_zh(settings, prompt, expected_prompt, expected_valid, expected_sco
 def test_scan_unknown():
     try:
         Anonymize(Vault(), language="unknown")
-    except LLMGuardValidationError as e:
+    except TueriValidationError as e:
         assert str(e) == f"Language must be in the list of allowed: {ALL_SUPPORTED_LANGUAGES}"
 
 

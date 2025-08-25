@@ -39,9 +39,11 @@ dependencies = [
 [project.optional-dependencies]
 cpu = [
   "llm-guard[onnxruntime]==0.3.16",
+  "optimum[onnxruntime]==1.25.2",
 ]
 gpu = [
   "llm-guard[onnxruntime-gpu]==0.3.16",
+  "optimum[onnxruntime-gpu]==1.25.2",
 ]
 
 [tool.setuptools]

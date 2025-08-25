@@ -12,8 +12,8 @@ rate_limit:
   limit: ${RATE_LIMIT_LIMIT:100/minute}
 
 auth:
- type: http_bearer
- token: ${AUTH_TOKEN:}
+  type: http_bearer
+  token: ${AUTH_TOKEN:}
 
 tracing:
   exporter: ${TRACING_EXPORTER:console}
