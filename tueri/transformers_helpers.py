@@ -4,7 +4,7 @@ import importlib
 from functools import lru_cache
 from typing import Literal, get_args
 
-from .exception import LLMGuardValidationError
+from .exception import TueriValidationError
 from .model import Model
 from .util import device, get_logger, lazy_load_dep
 
@@ -159,7 +159,7 @@ def pipeline(
     **kwargs,
 ):
     if task not in get_args(ClassificationTask):
-        raise LLMGuardValidationError(f"Invalid task. Must be one of {ClassificationTask}")
+        raise TueriValidationError(f"Invalid task. Must be one of {ClassificationTask}")
 
     if kwargs.get("max_length", None) is None:
         kwargs["max_length"] = tokenizer.model_max_length

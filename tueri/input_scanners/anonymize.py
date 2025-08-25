@@ -9,7 +9,7 @@ from presidio_anonymizer.core.text_replace_builder import TextReplaceBuilder
 
 from tueri.input_scanners.anonymize_helpers.ner_mapping import NERConfig
 
-from ..exception import LLMGuardValidationError
+from ..exception import TueriValidationError
 from ..util import calculate_risk_score, get_logger
 from ..vault import Vault
 from .anonymize_helpers import (
@@ -84,7 +84,7 @@ class Anonymize(Scanner):
         """
 
         if language not in ALL_SUPPORTED_LANGUAGES:
-            raise LLMGuardValidationError(
+            raise TueriValidationError(
                 f"Language must be in the list of allowed: {ALL_SUPPORTED_LANGUAGES}"
             )
 
