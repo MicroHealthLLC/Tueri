@@ -26,9 +26,12 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Set up a working directory
 WORKDIR $HOME/app
 
+# Copy the main tueri package
+COPY --chown=user:user tueri ./tueri
+
 # Copy pyproject.toml and other necessary files for installation
-COPY --chown=user:user pyproject.toml ./
-COPY --chown=user:user app ./app
+COPY --chown=user:user tueri_api/pyproject.toml ./
+COPY --chown=user:user tueri_api/app ./app
 
 # Install the project's dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
@@ -36,8 +39,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 RUN python -m spacy download en_core_web_sm
 
-COPY --chown=user:user ./config/scanners.yml ./config/scanners.yml
-COPY --chown=user:user entrypoint.sh ./entrypoint.sh
+COPY --chown=user:user tueri_api/config/scanners.yml ./config/scanners.yml
+COPY --chown=user:user tueri_api/entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh
 
