@@ -130,3 +130,9 @@ cython_debug/
 
 .vscode
 .benchmarks
+
+# Claude Code helper files
+CLAUDE.md
+detailed_index.md
+general_index.md
+history.md

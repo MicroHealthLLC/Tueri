@@ -7,7 +7,6 @@ import torch
 from opentelemetry import metrics
 
 from tueri import input_scanners, output_scanners
-from tueri.input_scanners.anonymize_helpers import DEBERTA_AI4PRIVACY_v2_CONF
 from tueri.input_scanners.ban_code import MODEL_SM as BAN_CODE_MODEL
 from tueri.input_scanners.ban_competitors import MODEL_V1 as BAN_COMPETITORS_MODEL
 from tueri.input_scanners.ban_topics import MODEL_DEBERTA_BASE_V2 as BAN_TOPICS_MODEL
@@ -129,8 +128,8 @@ def _get_input_scanner(
         scanner_config["use_onnx"] = True
 
     if scanner_name == "Anonymize":
-        _configure_model(DEBERTA_AI4PRIVACY_v2_CONF["DEFAULT_MODEL"], scanner_config)
-        scanner_config["recognizer_conf"] = DEBERTA_AI4PRIVACY_v2_CONF
+        # RoBERTa-based anonymizer doesn't need model configuration
+        pass
 
     if scanner_name == "BanCode":
         _configure_model(BAN_CODE_MODEL, scanner_config)
@@ -241,8 +240,8 @@ def _get_output_scanner(
         scanner_config["model"] = RELEVANCE_MODEL
 
     if scanner_name == "Sensitive":
-        _configure_model(DEBERTA_AI4PRIVACY_v2_CONF["DEFAULT_MODEL"], scanner_config)
-        scanner_config["recognizer_conf"] = DEBERTA_AI4PRIVACY_v2_CONF
+        # RoBERTa-based sensitive scanner doesn't need model configuration
+        pass
 
     if scanner_name == "Toxicity":
         _configure_model(TOXICITY_MODEL, scanner_config)
