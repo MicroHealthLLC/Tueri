@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import os
 from typing import Final
-from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
+from transformers.models.auto.tokenization_auto import AutoTokenizer
+from transformers.models.auto.modeling_auto import AutoModelForTokenClassification
+from transformers.pipelines import pipeline
 
 from ..exception import TueriValidationError
 from ..util import calculate_risk_score, get_logger
