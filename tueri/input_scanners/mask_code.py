@@ -6,16 +6,32 @@ import torch
 import numpy as np
 
 from tueri.util import calculate_risk_score, get_logger
+from tueri.model import Model
+from tueri.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
 from .base import Scanner
 
 LOGGER = get_logger()
 
+# programming language identification model configuration (from code.py)
+DEFAULT_LANGUAGE_MODEL = Model(
+    path="philomath-1209/programming-language-identification",
+    revision="9090d38e7333a2c6ff00f154ab981a549842c20f",
+    onnx_path="philomath-1209/programming-language-identification",
+    onnx_revision="9090d38e7333a2c6ff00f154ab981a549842c20f",
+    onnx_subfolder="onnx",
+    pipeline_kwargs={
+        "top_k": None,
+        "return_token_type_ids": False,
+        "max_length": 512,
+        "truncation": True,
+    },
+)
+
 
 class CodeBertaClassifier:
-    def __init__(self):
+    def __init__(self, language_model=None, use_onnx=False, language_threshold=0.5):
         # TODO: this model needs to be trained/fine-tuned for proper code classification
-        # has to be able to identify code segments in the text so that it can be masked, instead of classifying the entire text as code or NL, so that the prompt can still go through
-        # also needs to be able to identify the programming language
+        # has to be able to tokenize and identify code segments in the text so that it can be masked, instead of classifying the entire text as code or NL, so that the prompt can still go through
         self.model_name = "huggingface/CodeBERTa-small-v1"
         
         # self.tokenizer = RobertaTokenizer.from_pretrained(self.model_name)
@@ -26,6 +42,23 @@ class CodeBertaClassifier:
         # )
         # self.model = self.model.to('cpu')
         # self.model.eval()
+        
+        # Initialize language identification pipeline
+        self._language_threshold = language_threshold
+        if language_model is None:
+            language_model = DEFAULT_LANGUAGE_MODEL
+        
+        tf_tokenizer, tf_model = get_tokenizer_and_model_for_classification(
+            model=language_model,
+            use_onnx=use_onnx,
+        )
+        
+        self._language_pipeline = pipeline(
+            task="text-classification",
+            model=tf_model,
+            tokenizer=tf_tokenizer,
+            **language_model.pipeline_kwargs,
+        )
     
     def _is_likely_code(self, text):
         # More precise code indicators with weighted scoring
@@ -40,6 +73,7 @@ class CodeBertaClassifier:
             (r'from\s+[a-zA-Z_][\w.]*\s+import\s+[a-zA-Z_][\w,\s*]*', 3),  # Python from import
             (r'(?:const|let|var)\s+[a-zA-Z_]\w*\s*=', 2),  # JS variable declarations
             (r'[a-zA-Z_]\w*\s*=\s*(?:new\s+\w+\(|[\[\{])', 2),  # Object/array assignments
+            (r'\b(?:ls|cd|pwd|mkdir|rm|cp|mv|grep|find|awk|sed|cat|head|tail|sort|uniq)\s+[\w\-/\.]+', 3),  # Common shell commands
         ]
         
         medium_confidence_patterns = [
@@ -51,6 +85,8 @@ class CodeBertaClassifier:
             (r'[a-zA-Z_]\w*\.[a-zA-Z_]\w*\([^)]*\)', 2),  # Method calls
             (r'(?:SELECT|INSERT|UPDATE|DELETE)\s+.*(?:FROM|INTO|SET|WHERE)', 2),  # SQL
             (r'[a-zA-Z_]\w*\[[^\]]+\]\s*=', 2),  # Array assignments
+            (r'[A-Z_]+\s*=\s*(?:True|False|\d+|\'[^\']*\'|"[^"]*")', 2),  # Configuration assignments
+            (r'(?:DEBUG|HOST|PORT|URL|API_KEY|SECRET|PASSWORD|USER)\s*=', 2),  # Common config variables
         ]
         
         low_confidence_patterns = [
@@ -85,10 +121,51 @@ class CodeBertaClassifier:
         if word_count > 20:  # Longer texts need higher scores
             threshold = 0.3
         else:
-            threshold = 0.2
+            threshold = 0.25
+        
+        # Special case: if it's just describing code structure in natural language, be more conservative
+        descriptive_phrases = [
+            "use if", "like if", "such as", "for example", "structure like", "syntax is", "format is"
+        ]
+        if any(phrase in text.lower() for phrase in descriptive_phrases):
+            threshold *= 1.5  # Make it harder to detect as code
             
         normalized_score = score / max(word_count, 1)
         return normalized_score > threshold
+    
+    def _identify_language(self, code_text):
+        """
+        Identify the programming language of a code segment using the HuggingFace model.
+        
+        Returns:
+            str: The detected programming language or 'CODE' if detection fails/confidence is low
+        """
+        try:
+            # Use the language identification pipeline
+            results = self._language_pipeline([code_text])
+            
+            if results and isinstance(results[0], list) and len(results[0]) > 0:
+                # Get the top prediction
+                top_prediction = results[0][0]
+                language = top_prediction.get("label", "CODE")
+                confidence = top_prediction.get("score", 0.0)
+                
+                LOGGER.debug(
+                    "Language identification result",
+                    language=language,
+                    confidence=confidence,
+                    code_preview=code_text[:100] + "..." if len(code_text) > 100 else code_text
+                )
+                
+                # Only return the detected language if confidence is above threshold
+                if confidence >= self._language_threshold:
+                    return language
+                    
+            return "CODE"
+            
+        except Exception as e:
+            LOGGER.warning("Language identification failed", error=str(e))
+            return "CODE"
     
     def _calculate_code_likelihood(self, text):
         features = {
@@ -133,7 +210,8 @@ class CodeBertaClassifier:
             (r'(?:const|let|var|int|float|double|char|bool)\s+[a-zA-Z_]\w*.*(?:[;=]|$)', re.MULTILINE), # Variable declarations and assignments
             (r'[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*\([^)]*\)(?:\.[a-zA-Z_]\w*\([^)]*\))*', re.MULTILINE), # Method calls with chaining
             (r'(?:SELECT|INSERT|UPDATE|DELETE).*?(?:;|\n|$)', re.MULTILINE | re.DOTALL | re.IGNORECASE), # SQL queries
-            (r'(?:^|\n)(?:\$\s*)?(?:[a-zA-Z_]\w*/)?\w+(?:\s+[-\w]+)*(?:\s+[|&]+\s*\w+)*(?:\s*[;&]|$)', re.MULTILINE), # Shell commands
+            (r'(?:ls|cd|pwd|mkdir|rm|cp|mv|grep|find|awk|sed|cat|head|tail|sort|uniq)\s+[\w\-/\.\s]+', re.MULTILINE), # Shell commands
+            (r'(?:^|\n)(?:[A-Z_]+\s*=\s*(?:True|False|\d+|\'[^\']*\'|"[^"]*")\s*)+', re.MULTILINE), # Configuration blocks
             (r'[^.\n]*[;{}][^.\n]*(?:\n|$)', re.MULTILINE), # Code with semicolons or braces
         ]
         
@@ -169,22 +247,34 @@ class CodeBertaClassifier:
             return {
                 "masked_text": text,
                 "code_segments": [],
-                "positions": []
+                "positions": [],
+                "languages": []
             }
         code_segments.sort(key=lambda x: x[0], reverse=True)
         masked_text = text
         extracted_segments = []
         positions = []
+        detected_languages = []
+        
         for start, end, segment in code_segments:
-            masked_text = masked_text[:start] + mask_token + masked_text[end:]
+            # Identify the programming language for this code segment
+            detected_language = self._identify_language(segment)
+            language_specific_token = f"[{detected_language}]"
+            
+            masked_text = masked_text[:start] + language_specific_token + masked_text[end:]
             extracted_segments.append(segment)
-            positions.append((start, start + len(mask_token)))
+            detected_languages.append(detected_language)
+            positions.append((start, start + len(language_specific_token)))
+        
         extracted_segments.reverse()
         positions.reverse()
+        detected_languages.reverse()
+        
         return {
             "masked_text": masked_text,
             "code_segments": extracted_segments,
-            "positions": positions
+            "positions": positions,
+            "languages": detected_languages
         }
 
 
@@ -198,6 +288,9 @@ class MaskCode(Scanner):
         *,
         threshold: float = 0.5,
         mask_token: str = "[CODE]",
+        language_model: Model | None = None,
+        use_onnx: bool = False,
+        language_threshold: float = 0.5,
         **kwargs
     ) -> None:
         """
@@ -206,11 +299,18 @@ class MaskCode(Scanner):
         Parameters:
            threshold (float): The probability threshold for code detection. Default is 0.5.
            mask_token (str): Token to replace detected code with. Default is "[CODE]".
+           language_model (Model): The model to use for language identification.
+           use_onnx (bool): Whether to use ONNX for language identification inference. Default is False.
+           language_threshold (float): The threshold for language identification confidence. Default is 0.5.
            **kwargs: Additional parameters (ignored for compatibility).
         """
         self._threshold = threshold
         self._mask_token = mask_token
-        self._classifier = CodeBertaClassifier()
+        self._classifier = CodeBertaClassifier(
+            language_model=language_model,
+            use_onnx=use_onnx,
+            language_threshold=language_threshold
+        )
         
         # Log any unused parameters for debugging
         if kwargs:
@@ -229,17 +329,20 @@ class MaskCode(Scanner):
         else:
             score = 1 - classification["confidence"]
         
-        risk_score = calculate_risk_score(score, self._threshold)
-        
         # Always mask code segments if any are detected
         masking_result = self._classifier.mask_code_in_text(prompt, self._mask_token)
         
+        # Use a consistent risk score calculation based on detection
         if masking_result['code_segments']:
+            # If code was detected, use the classification score but ensure it's above threshold
+            risk_score = max(score, self._threshold + 0.1)
+            
             LOGGER.warning(
                 "Detected and masked code in the text",
-                score=score,
+                score=risk_score,
                 threshold=self._threshold,
                 code_segments_count=len(masking_result['code_segments']),
+                detected_languages=masking_result.get('languages', []),
                 original_text=prompt[:100] + "..." if len(prompt) > 100 else prompt,
                 masked_text=masking_result['masked_text'][:100] + "..." if len(masking_result['masked_text']) > 100 else masking_result['masked_text']
             )
@@ -247,9 +350,12 @@ class MaskCode(Scanner):
             # Return masked text but allow the request to continue (True)
             return masking_result['masked_text'], True, risk_score
         else:
+            # If no code detected, calculate risk score normally
+            risk_score = calculate_risk_score(score, self._threshold)
+            
             LOGGER.debug(
                 "No code detected in the text",
-                score=score,
+                score=risk_score,
                 threshold=self._threshold,
                 text=prompt[:100] + "..." if len(prompt) > 100 else prompt
             )
