@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Build Docker Compose
         run: |
-          docker compose build
+          docker compose -f tueri_api/docker-compose.yml build
 
   ready-for-pr:
     name: Ready for PR
