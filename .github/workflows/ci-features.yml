@@ -19,6 +19,7 @@ jobs:
     needs: prep-workflow
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Build Docker Compose
         run: |
           docker compose -f tueri_api/docker-compose.yml build
