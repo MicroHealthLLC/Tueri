@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from .anonymize import Anonymize
-from .ban_code import BanCode
+from .mask_code import MaskCode
 from .ban_competitors import BanCompetitors
 from .ban_substrings import BanSubstrings
 from .ban_topics import BanTopics
@@ -35,8 +35,8 @@ def get_scanner_by_name(scanner_name: str, scanner_config: dict | None = None) -
     if scanner_name == "Anonymize":
         return Anonymize(**scanner_config)
 
-    if scanner_name == "BanCode":
-        return BanCode(**scanner_config)
+    if scanner_name == "MaskCode":
+        return MaskCode(**scanner_config)
 
     if scanner_name == "BanCompetitors":
         return BanCompetitors(**scanner_config)

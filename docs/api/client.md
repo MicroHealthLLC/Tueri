@@ -52,7 +52,7 @@
     print(sanitized_prompt)
     ```
 
-=== "Call LLM provider and LLM Guard API in parallel"
+=== "Call LLM provider and Tueri API in parallel"
 
     ```python linenums="1"
     import os
