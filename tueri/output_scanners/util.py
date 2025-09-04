@@ -1,6 +1,5 @@
 from typing import Dict, Optional
 
-from .ban_code import BanCode
 from .ban_competitors import BanCompetitors
 from .ban_substrings import BanSubstrings
 from .ban_topics import BanTopics
@@ -14,6 +13,7 @@ from .json import JSON
 from .language import Language
 from .language_same import LanguageSame
 from .malicious_urls import MaliciousURLs
+from .mask_code import MaskCode
 from .no_refusal import NoRefusal, NoRefusalLight
 from .reading_time import ReadingTime
 from .regex import Regex
@@ -38,8 +38,8 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
     if scanner_config is None:
         scanner_config = {}
 
-    if scanner_name == "BanCode":
-        return BanCode(**scanner_config)
+    if scanner_name == "MaskCode":
+        return MaskCode(**scanner_config)
 
     if scanner_name == "BanCompetitors":
         return BanCompetitors(**scanner_config)

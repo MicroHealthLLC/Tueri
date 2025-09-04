@@ -5,7 +5,7 @@ app:
   scan_fail_fast: ${SCAN_FAIL_FAST:false}
   scan_prompt_timeout: ${SCAN_PROMPT_TIMEOUT:30}
   scan_output_timeout: ${SCAN_OUTPUT_TIMEOUT:30}
-  lazy_load: ${LAZY_LOAD:true}
+  lazy_load: ${LAZY_LOAD:true} # TODO: Can be changed to false to allow loading models at startup (speed optimization), but runs into errors causing container to restart
 
 rate_limit:
   enabled: ${RATE_LIMIT_ENABLED:false}
@@ -27,9 +27,8 @@ metrics:
 input_scanners:
   - type: Anonymize
     params:
-      use_faker: false
-      threshold: 0.95
-      # model_path: "./distilbert_finetuned_ai4privacy_v2"
+      threshold: 0.50 # Higher value = less aggressive PII removal
+      # Removed use_faker and model_path, no longer needed
   - type: BanTopics
     params:
       topics: [
@@ -66,6 +65,10 @@ input_scanners:
         "gender identity and sexual orientation"
       ]
       threshold: 0.6
+      model_max_length: 256
+  - type: MaskCode
+    params:
+      threshold: 0.97
       model_max_length: 256
 #  - type: Code
 #    params:
@@ -162,7 +165,7 @@ output_scanners:
   - type: Sensitive
     params:
       redact: false
-      threshold: 0.95
+      threshold: 0.50 # Higher value = less aggressive PII removal
   - type: Toxicity
     params:
       threshold: 0.6
