@@ -16,7 +16,6 @@ from .util import get_scanner_by_name
 
 __all__ = [
     "Anonymize",
-    "MaskCode",
     "BanCompetitors",
     "BanSubstrings",
     "BanTopics",
