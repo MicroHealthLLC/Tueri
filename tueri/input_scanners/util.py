@@ -1,22 +1,18 @@
 from __future__ import annotations
 
 from .anonymize import Anonymize
-from .mask_code import MaskCode
 from .ban_competitors import BanCompetitors
 from .ban_substrings import BanSubstrings
 from .ban_topics import BanTopics
 from .base import Scanner
-from .code import Code
-from .gibberish import Gibberish
 from .invisible_text import InvisibleText
 from .language import Language
+from .mask_code import MaskCode
 from .prompt_injection import PromptInjection
 from .regex import Regex
 from .secrets import Secrets
 from .sentiment import Sentiment
 from .token_limit import TokenLimit
-from .toxicity import Toxicity
-
 
 def get_scanner_by_name(scanner_name: str, scanner_config: dict | None = None) -> Scanner:
     """
@@ -35,9 +31,6 @@ def get_scanner_by_name(scanner_name: str, scanner_config: dict | None = None) -
     if scanner_name == "Anonymize":
         return Anonymize(**scanner_config)
 
-    if scanner_name == "MaskCode":
-        return MaskCode(**scanner_config)
-
     if scanner_name == "BanCompetitors":
         return BanCompetitors(**scanner_config)
 
@@ -47,17 +40,14 @@ def get_scanner_by_name(scanner_name: str, scanner_config: dict | None = None) -
     if scanner_name == "BanTopics":
         return BanTopics(**scanner_config)
 
-    if scanner_name == "Code":
-        return Code(**scanner_config)
-
-    if scanner_name == "Gibberish":
-        return Gibberish(**scanner_config)
-
     if scanner_name == "InvisibleText":
         return InvisibleText()
 
     if scanner_name == "Language":
         return Language(**scanner_config)
+    
+    if scanner_name == "MaskCode":
+        return MaskCode(**scanner_config)
 
     if scanner_name == "PromptInjection":
         return PromptInjection(**scanner_config)
@@ -73,8 +63,5 @@ def get_scanner_by_name(scanner_name: str, scanner_config: dict | None = None) -
 
     if scanner_name == "TokenLimit":
         return TokenLimit(**scanner_config)
-
-    if scanner_name == "Toxicity":
-        return Toxicity(**scanner_config)
 
     raise ValueError(f"Unknown scanner name: {scanner_name}")

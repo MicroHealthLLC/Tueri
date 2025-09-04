@@ -5,23 +5,19 @@ from .ban_substrings import BanSubstrings
 from .ban_topics import BanTopics
 from .base import Scanner
 from .bias import Bias
-from .code import Code
 from .deanonymize import Deanonymize
 from .factual_consistency import FactualConsistency
-from .gibberish import Gibberish
 from .json import JSON
 from .language import Language
 from .language_same import LanguageSame
 from .malicious_urls import MaliciousURLs
 from .mask_code import MaskCode
 from .no_refusal import NoRefusal, NoRefusalLight
-from .reading_time import ReadingTime
 from .regex import Regex
 from .relevance import Relevance
 from .sensitive import Sensitive
 from .sentiment import Sentiment
-from .toxicity import Toxicity
-from .url_reachabitlity import URLReachability
+from .url_reachability import URLReachability
 
 
 def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None) -> Scanner:
@@ -59,9 +55,6 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
     if scanner_name == "FactualConsistency":
         return FactualConsistency(**scanner_config)
 
-    if scanner_name == "Gibberish":
-        return Gibberish(**scanner_config)
-
     if scanner_name == "JSON":
         return JSON(**scanner_config)
 
@@ -71,9 +64,6 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
     if scanner_name == "LanguageSame":
         return LanguageSame(**scanner_config)
 
-    if scanner_name == "Code":
-        return Code(**scanner_config)
-
     if scanner_name == "MaliciousURLs":
         return MaliciousURLs(**scanner_config)
 
@@ -82,9 +72,6 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
 
     if scanner_name == "NoRefusalLight":
         return NoRefusalLight()
-
-    if scanner_name == "ReadingTime":
-        return ReadingTime(**scanner_config)
 
     if scanner_name == "Regex":
         return Regex(**scanner_config)
@@ -97,9 +84,6 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
 
     if scanner_name == "Sentiment":
         return Sentiment(**scanner_config)
-
-    if scanner_name == "Toxicity":
-        return Toxicity(**scanner_config)
 
     if scanner_name == "URLReachability":
         return URLReachability(**scanner_config)
