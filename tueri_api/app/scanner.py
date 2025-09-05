@@ -7,19 +7,15 @@ import torch
 from opentelemetry import metrics
 
 from tueri import input_scanners, output_scanners
-from tueri.input_scanners.ban_code import MODEL_SM as BAN_CODE_MODEL
 from tueri.input_scanners.ban_competitors import MODEL_V1 as BAN_COMPETITORS_MODEL
 from tueri.input_scanners.ban_topics import MODEL_DEBERTA_BASE_V2 as BAN_TOPICS_MODEL
 from tueri.input_scanners.base import Scanner as InputScanner
-from tueri.input_scanners.code import DEFAULT_MODEL as CODE_MODEL
-from tueri.input_scanners.gibberish import DEFAULT_MODEL as GIBBERISH_MODEL
 from tueri.input_scanners.language import DEFAULT_MODEL as LANGUAGE_MODEL
 from tueri.input_scanners.prompt_injection import V2_MODEL as PROMPT_INJECTION_MODEL
-from tueri.input_scanners.toxicity import DEFAULT_MODEL as TOXICITY_MODEL
 from tueri.model import Model
 from tueri.output_scanners.base import Scanner as OutputScanner
 from tueri.output_scanners.bias import DEFAULT_MODEL as BIAS_MODEL
-from tueri.output_scanners.malicious_urls import DEFAULT_MODEL as MALICIOUS_URLS_MODEL
+from tueri.output_scanners.bad_url import DEFAULT_MODEL as BAD_URL_MODEL
 from tueri.output_scanners.no_refusal import DEFAULT_MODEL as NO_REFUSAL_MODEL
 from tueri.output_scanners.relevance import MODEL_EN_BGE_SMALL as RELEVANCE_MODEL
 from tueri.vault import Vault
@@ -117,13 +113,9 @@ def _get_input_scanner(
 
     if scanner_name in [
         "Anonymize",
-        "BanCode",
         "BanTopics",
-        "Code",
-        "Gibberish",
         "Language",
         "PromptInjection",
-        "Toxicity",
     ]:
         scanner_config["use_onnx"] = True
 
@@ -131,9 +123,6 @@ def _get_input_scanner(
         # RoBERTa-based anonymizer doesn't need model configuration
         pass
 
-    if scanner_name == "BanCode":
-        _configure_model(BAN_CODE_MODEL, scanner_config)
-        scanner_config["model"] = BAN_CODE_MODEL
 
     if scanner_name == "BanTopics":
         _configure_model(BAN_TOPICS_MODEL, scanner_config)
@@ -143,14 +132,6 @@ def _get_input_scanner(
         _configure_model(BAN_COMPETITORS_MODEL, scanner_config)
         scanner_config["model"] = BAN_COMPETITORS_MODEL
 
-    if scanner_name == "Code":
-        _configure_model(CODE_MODEL, scanner_config)
-        scanner_config["model"] = CODE_MODEL
-
-    if scanner_name == "Gibberish":
-        _configure_model(GIBBERISH_MODEL, scanner_config)
-        scanner_config["model"] = GIBBERISH_MODEL
-
     if scanner_name == "Language":
         _configure_model(LANGUAGE_MODEL, scanner_config)
         scanner_config["model"] = LANGUAGE_MODEL
@@ -158,10 +139,6 @@ def _get_input_scanner(
     if scanner_name == "PromptInjection":
         _configure_model(PROMPT_INJECTION_MODEL, scanner_config)
         scanner_config["model"] = PROMPT_INJECTION_MODEL
-
-    if scanner_name == "Toxicity":
-        _configure_model(TOXICITY_MODEL, scanner_config)
-        scanner_config["model"] = TOXICITY_MODEL
 
     return input_scanners.get_scanner_by_name(scanner_name, scanner_config)
 
@@ -179,25 +156,18 @@ def _get_output_scanner(
         scanner_config["vault"] = vault
 
     if scanner_name in [
-        "BanCode",
         "BanTopics",
         "Bias",
-        "Code",
         "Language",
         "LanguageSame",
-        "MaliciousURLs",
+        "BadURL",
         "NoRefusal",
         "FactualConsistency",
-        "Gibberish",
         "Relevance",
         "Sensitive",
-        "Toxicity",
     ]:
         scanner_config["use_onnx"] = True
 
-    if scanner_name == "BanCode":
-        _configure_model(BAN_CODE_MODEL, scanner_config)
-        scanner_config["model"] = BAN_CODE_MODEL
 
     if scanner_name == "BanCompetitors":
         _configure_model(BAN_COMPETITORS_MODEL, scanner_config)
@@ -211,10 +181,6 @@ def _get_output_scanner(
         _configure_model(BIAS_MODEL, scanner_config)
         scanner_config["model"] = BIAS_MODEL
 
-    if scanner_name == "Code":
-        _configure_model(CODE_MODEL, scanner_config)
-        scanner_config["model"] = CODE_MODEL
-
     if scanner_name == "Language":
         _configure_model(LANGUAGE_MODEL, scanner_config)
         scanner_config["model"] = LANGUAGE_MODEL
@@ -223,17 +189,13 @@ def _get_output_scanner(
         _configure_model(LANGUAGE_MODEL, scanner_config)
         scanner_config["model"] = LANGUAGE_MODEL
 
-    if scanner_name == "MaliciousURLs":
-        _configure_model(MALICIOUS_URLS_MODEL, scanner_config)
-        scanner_config["model"] = MALICIOUS_URLS_MODEL
+    if scanner_name == "BadURL":
+        _configure_model(BAD_URL_MODEL, scanner_config)
+        scanner_config["model"] = BAD_URL_MODEL
 
     if scanner_name == "NoRefusal":
         _configure_model(NO_REFUSAL_MODEL, scanner_config)
         scanner_config["model"] = NO_REFUSAL_MODEL
-
-    if scanner_name == "Gibberish":
-        _configure_model(GIBBERISH_MODEL, scanner_config)
-        scanner_config["model"] = GIBBERISH_MODEL
 
     if scanner_name == "Relevance":
         _configure_model(RELEVANCE_MODEL, scanner_config)
@@ -242,10 +204,6 @@ def _get_output_scanner(
     if scanner_name == "Sensitive":
         # RoBERTa-based sensitive scanner doesn't need model configuration
         pass
-
-    if scanner_name == "Toxicity":
-        _configure_model(TOXICITY_MODEL, scanner_config)
-        scanner_config["model"] = TOXICITY_MODEL
 
     return output_scanners.get_scanner_by_name(scanner_name, scanner_config)
 
@@ -258,6 +216,16 @@ class InputIsInvalid(Exception):
 
     def __str__(self):
         return f"Input is invalid based on {self.scanner_name}: {self.input} (risk score: {self.risk_score})"
+
+
+class OutputIsInvalid(Exception):
+    def __init__(self, scanner_name: str, output: str, risk_score: float):
+        self.scanner_name = scanner_name
+        self.output = output
+        self.risk_score = risk_score
+
+    def __str__(self):
+        return f"Output is invalid based on {self.scanner_name}: {self.output} (risk score: {self.risk_score})"
 
 
 def scan_prompt(scanner: InputScanner, prompt: str) -> (str, float):
@@ -301,7 +269,7 @@ def scan_output(scanner: OutputScanner, prompt: str, output: str) -> (str, float
     scanners_valid_counter.add(1, {"source": "output", "valid": is_valid, "scanner": scanner_name})
 
     if not is_valid:
-        raise InputIsInvalid(scanner_name, output, risk_score)
+        raise OutputIsInvalid(scanner_name, output, risk_score)
 
     return type(scanner).__name__, risk_score
 
