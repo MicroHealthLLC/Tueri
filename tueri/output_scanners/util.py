@@ -11,14 +11,12 @@ from .factual_consistency import FactualConsistency
 from .json import JSON
 from .language import Language
 from .language_same import LanguageSame
-from .malicious_urls import MaliciousURLs
 from .mask_code import MaskCode
 from .no_refusal import NoRefusal, NoRefusalLight
 from .regex import Regex
 from .relevance import Relevance
 from .sensitive import Sensitive
 from .sentiment import Sentiment
-from .url_reachability import URLReachability
 
 
 def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None) -> Scanner:
@@ -68,9 +66,6 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
     if scanner_name == "LanguageSame":
         return LanguageSame(**scanner_config)
 
-    if scanner_name == "MaliciousURLs":
-        return MaliciousURLs(**scanner_config)
-
     if scanner_name == "NoRefusal":
         return NoRefusal(**scanner_config)
 
@@ -88,8 +83,5 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
 
     if scanner_name == "Sentiment":
         return Sentiment(**scanner_config)
-
-    if scanner_name == "URLReachability":
-        return URLReachability(**scanner_config)
-
+    
     raise ValueError(f"Unknown scanner name: {scanner_name}!")

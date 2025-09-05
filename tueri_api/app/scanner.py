@@ -15,7 +15,7 @@ from tueri.input_scanners.prompt_injection import V2_MODEL as PROMPT_INJECTION_M
 from tueri.model import Model
 from tueri.output_scanners.base import Scanner as OutputScanner
 from tueri.output_scanners.bias import DEFAULT_MODEL as BIAS_MODEL
-from tueri.output_scanners.malicious_urls import DEFAULT_MODEL as MALICIOUS_URLS_MODEL
+from tueri.output_scanners.bad_url import DEFAULT_MODEL as BAD_URL_MODEL
 from tueri.output_scanners.no_refusal import DEFAULT_MODEL as NO_REFUSAL_MODEL
 from tueri.output_scanners.relevance import MODEL_EN_BGE_SMALL as RELEVANCE_MODEL
 from tueri.vault import Vault
@@ -160,7 +160,7 @@ def _get_output_scanner(
         "Bias",
         "Language",
         "LanguageSame",
-        "MaliciousURLs",
+        "BadURL",
         "NoRefusal",
         "FactualConsistency",
         "Relevance",
@@ -189,9 +189,9 @@ def _get_output_scanner(
         _configure_model(LANGUAGE_MODEL, scanner_config)
         scanner_config["model"] = LANGUAGE_MODEL
 
-    if scanner_name == "MaliciousURLs":
-        _configure_model(MALICIOUS_URLS_MODEL, scanner_config)
-        scanner_config["model"] = MALICIOUS_URLS_MODEL
+    if scanner_name == "BadURL":
+        _configure_model(BAD_URL_MODEL, scanner_config)
+        scanner_config["model"] = BAD_URL_MODEL
 
     if scanner_name == "NoRefusal":
         _configure_model(NO_REFUSAL_MODEL, scanner_config)
