@@ -1,5 +1,6 @@
 from typing import Dict, Optional
 
+from .bad_url import BadURL
 from .ban_competitors import BanCompetitors
 from .ban_substrings import BanSubstrings
 from .ban_topics import BanTopics
@@ -34,6 +35,9 @@ def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None
     if scanner_config is None:
         scanner_config = {}
 
+    if scanner_name == "BadURL":
+        return BadURL(**scanner_config)
+    
     if scanner_name == "MaskCode":
         return MaskCode(**scanner_config)
 

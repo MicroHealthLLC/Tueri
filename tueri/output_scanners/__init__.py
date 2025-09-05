@@ -1,5 +1,6 @@
 """LLM output scanners init"""
 
+from .bad_url import BadURL
 from .ban_competitors import BanCompetitors
 from .ban_substrings import BanSubstrings
 from .ban_topics import BanTopics
@@ -20,6 +21,7 @@ from .url_reachability import URLReachability
 from .util import get_scanner_by_name
 
 __all__ = [
+    "BadURL",
     "BanCompetitors",
     "BanSubstrings",
     "BanTopics",
