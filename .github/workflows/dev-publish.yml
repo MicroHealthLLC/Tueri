@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'integration'
-      - 'ci-features-test'
 
 jobs:
   dev-publish:
