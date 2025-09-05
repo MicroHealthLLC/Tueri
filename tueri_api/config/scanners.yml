@@ -5,7 +5,7 @@ app:
   scan_fail_fast: ${SCAN_FAIL_FAST:false}
   scan_prompt_timeout: ${SCAN_PROMPT_TIMEOUT:30}
   scan_output_timeout: ${SCAN_OUTPUT_TIMEOUT:30}
-  lazy_load: ${LAZY_LOAD:true} # TODO: Can be changed to false to allow loading models at startup (speed optimization), but runs into errors causing container to restart
+  lazy_load: ${LAZY_LOAD:false}
 
 rate_limit:
   enabled: ${RATE_LIMIT_ENABLED:false}

@@ -43,7 +43,7 @@ class BadURL(Scanner):
         self,
         *,
         model: Model | None = None,
-        malicious_threshold: float = 0.5,
+        threshold: float = 0.5,
         use_onnx: bool = False,
         success_status_codes: list[int] | None = None,
         timeout: int = 5,
@@ -51,12 +51,12 @@ class BadURL(Scanner):
         """
         Parameters:
             model: The model to use for malicious URL detection.
-            malicious_threshold: The threshold used to determine if the URL is malicious.
+            threshold: The threshold used to determine if the URL is malicious.
             use_onnx: Whether to use the ONNX version of the model.
             success_status_codes: A list of status codes that are considered as successful.
             timeout: The timeout in seconds for the HTTP requests.
         """
-        self._malicious_threshold = malicious_threshold
+        self._malicious_threshold = threshold
         self._timeout = timeout
 
         if success_status_codes is None:

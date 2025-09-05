@@ -17,7 +17,6 @@ By offering sanitization, detection of harmful language, prevention of data leak
 
 **Examples**:
 
-- Get started with [ChatGPT and Tueri](./examples/openai_api.py).
 - Deploy Tueri as [API](./docs/api/overview.md)
 
 ## Supported scanners
@@ -25,41 +24,33 @@ By offering sanitization, detection of harmful language, prevention of data leak
 ### Prompt scanners
 
 - [Anonymize](./docs/input_scanners/anonymize.md)
-- [BanCode](./docs/input_scanners/ban_code.md)
 - [BanCompetitors](./docs/input_scanners/ban_competitors.md)
 - [BanSubstrings](./docs/input_scanners/ban_substrings.md)
 - [BanTopics](./docs/input_scanners/ban_topics.md)
-- [Code](./docs/input_scanners/code.md)
-- [Gibberish](./docs/input_scanners/gibberish.md)
 - [InvisibleText](./docs/input_scanners/invisible_text.md)
 - [Language](./docs/input_scanners/language.md)
+- [MaskCode](./docs/input_scanners/mask_code.md)
 - [PromptInjection](./docs/input_scanners/prompt_injection.md)
 - [Regex](./docs/input_scanners/regex.md)
 - [Secrets](./docs/input_scanners/secrets.md)
 - [Sentiment](./docs/input_scanners/sentiment.md)
 - [TokenLimit](./docs/input_scanners/token_limit.md)
-- [Toxicity](./docs/input_scanners/toxicity.md)
 
 ### Output scanners
 
-- [BanCode](./docs/output_scanners/ban_code.md)
+- [BadURL](./docs/output_scanners/bad_url.md)
 - [BanCompetitors](./docs/output_scanners/ban_competitors.md)
 - [BanSubstrings](./docs/output_scanners/ban_substrings.md)
 - [BanTopics](./docs/output_scanners/ban_topics.md)
 - [Bias](./docs/output_scanners/bias.md)
-- [Code](./docs/output_scanners/code.md)
 - [Deanonymize](./docs/output_scanners/deanonymize.md)
+- [FactualConsistency](./docs/output_scanners/factual_consistency.md)
 - [JSON](./docs/output_scanners/json.md)
 - [Language](./docs/output_scanners/language.md)
 - [LanguageSame](./docs/output_scanners/language_same.md)
-- [MaliciousURLs](./docs/output_scanners/malicious_urls.md)
+- [MaskCode](./docs/input_scanners/mask_code.md)
 - [NoRefusal](./docs/output_scanners/no_refusal.md)
-- [ReadingTime](./docs/output_scanners/reading_time.md)
-- [FactualConsistency](./docs/output_scanners/factual_consistency.md)
-- [Gibberish](./docs/output_scanners/gibberish.md)
 - [Regex](./docs/output_scanners/regex.md)
 - [Relevance](./docs/output_scanners/relevance.md)
 - [Sensitive](./docs/output_scanners/sensitive.md)
 - [Sentiment](./docs/output_scanners/sentiment.md)
-- [Toxicity](./docs/output_scanners/toxicity.md)
-- [URLReachability](./docs/output_scanners/url_reachability.md)
