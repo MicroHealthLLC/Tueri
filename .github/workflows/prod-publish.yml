@@ -27,5 +27,5 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -f tueri_api/Dockerfile -t public.ecr.aws/microhealthllc/tueri:prod .
-        docker push public.ecr.aws/microhealthllc/tueri:prod
+        docker build -f tueri_api/Dockerfile -t public.ecr.aws/microhealthllc/tueri:latest .
+        docker push public.ecr.aws/microhealthllc/tueri:latest
