@@ -86,10 +86,10 @@ input_scanners:
   - type: Secrets
     params:
       redact_mode: "all"
- - type: Toxicity
-   params:
-     threshold: 0.95
-     model_max_length: 256
+  - type: Toxicity
+    params:
+      threshold: 0.95
+      model_max_length: 256
 
 #------------
 
