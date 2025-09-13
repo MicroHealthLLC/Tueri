@@ -50,8 +50,8 @@ class ScannerConfig(BaseModel):
 
 
 class Config(BaseModel):
-    input_scanners: List[ScannerConfig] = Field()
-    output_scanners: List[ScannerConfig] = Field()
+    input_scanners: List[ScannerConfig] = Field(default_factory=list)
+    output_scanners: List[ScannerConfig] = Field(default_factory=list)
     rate_limit: RateLimitConfig = Field(default_factory=RateLimitConfig)
     auth: Optional[AuthConfig] = Field(default=None)
     app: AppConfig = Field(default_factory=AppConfig)

@@ -124,15 +124,15 @@ def _check_auth_function(auth_config: AuthConfig) -> callable:
 def _get_input_scanners_function(config: Config, vault: Vault) -> Callable:
     scanners = []
     if not config.app.lazy_load:
-        LOGGER.debug("Loading input scanners")
-        scanners = get_input_scanners(config.input_scanners, vault)
+        LOGGER.debug("Loading input scanners from MongoDB")
+        scanners = get_input_scanners([], vault)
 
     def get_cached_scanners() -> List[InputScanner]:
         nonlocal scanners
 
         if not scanners and config.app.lazy_load:
-            LOGGER.debug("Lazy loading input scanners")
-            scanners = get_input_scanners(config.input_scanners, vault)
+            LOGGER.debug("Lazy loading input scanners from MongoDB")
+            scanners = get_input_scanners([], vault)
 
         return scanners
 
@@ -142,15 +142,15 @@ def _get_input_scanners_function(config: Config, vault: Vault) -> Callable:
 def _get_output_scanners_function(config: Config, vault: Vault) -> Callable:
     scanners = []
     if not config.app.lazy_load:
-        LOGGER.debug("Loading output scanners")
-        scanners = get_output_scanners(config.output_scanners, vault)
+        LOGGER.debug("Loading output scanners from MongoDB")
+        scanners = get_output_scanners([], vault)
 
     def get_cached_scanners() -> List[OutputScanner]:
         nonlocal scanners
 
         if not scanners and config.app.lazy_load:
-            LOGGER.debug("Lazy loading output scanners")
-            scanners = get_output_scanners(config.output_scanners, vault)
+            LOGGER.debug("Lazy loading output scanners from MongoDB")
+            scanners = get_output_scanners([], vault)
 
         return scanners
 

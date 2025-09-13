@@ -1,10 +1,13 @@
 import asyncio
 import time
+import os
+import logging
 from typing import Dict, List, Optional
 
 import structlog
 import torch
 from opentelemetry import metrics
+from pymongo import MongoClient
 
 from tueri import input_scanners, output_scanners
 from tueri.input_scanners.ban_competitors import MODEL_V1 as BAN_COMPETITORS_MODEL
@@ -27,6 +30,22 @@ torch.set_num_threads(1)
 
 LOGGER = structlog.getLogger(__name__)
 
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://root:example@localhost:27017/")
+MONGO_DB, MONGO_COLLECTION = os.getenv("MONGO_DB", "ChatApp"), os.getenv("MONGO_COLLECTION", "TueriScanners")
+
+# Suppress MongoDB heartbeat logs
+logging.getLogger("pymongo.topology").setLevel(logging.WARNING)
+logging.getLogger("pymongo.serverSelection").setLevel(logging.WARNING)
+
+try:
+    mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000, heartbeatFrequencyMS=60000)
+    db = mongo_client[MONGO_DB]
+    scanners_collection = db[MONGO_COLLECTION]
+    mongo_client.admin.command("ping")
+except Exception as e:
+    LOGGER.error("Error connecting to MongoDB", error=str(e))
+    raise
+
 meter = metrics.get_meter_provider().get_meter(__name__)
 scanners_valid_counter = meter.create_counter(
     name="scanners.valid",
@@ -34,16 +53,24 @@ scanners_valid_counter = meter.create_counter(
     description="measures the number of valid scanners",
 )
 
+def _fetch_scanners_from_mongo(scanner_type: str) -> List[ScannerConfig]:
+    coll = scanners_collection.find({"type": scanner_type})
+    scanners: List[ScannerConfig] = []
+    for scanner in coll:
+        scanners.append(ScannerConfig(
+            type=scanner.get("id"), 
+            params=scanner.get("params", {})))
+    return scanners
 
-def get_input_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[InputScanner]:
+def get_input_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[InputScanner]: 
     """
-    Load input scanners from the configuration file.
+    Load input scanners from MongoDB.
     """
-
-    input_scanners_loaded = []
-    for scanner in scanners:
+    input_scanners_config = _fetch_scanners_from_mongo("input")
+    loaded_input_scanners: List[InputScanner] = []
+    for scanner in input_scanners_config:
         LOGGER.debug("Loading input scanner", scanner=scanner.type, **get_resource_utilization())
-        input_scanners_loaded.append(
+        loaded_input_scanners.append(
             _get_input_scanner(
                 scanner.type,
                 scanner.params,
@@ -51,17 +78,18 @@ def get_input_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[Inpu
             )
         )
 
-    return input_scanners_loaded
+    return loaded_input_scanners
 
 
 def get_output_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[OutputScanner]:
     """
-    Load output scanners from the configuration file.
+    Load output scanners from MongoDB.
     """
-    output_scanners_loaded = []
-    for scanner in scanners:
+    output_scanners_config = _fetch_scanners_from_mongo("output")
+    loaded_output_scanners: List[OutputScanner] = []
+    for scanner in output_scanners_config:
         LOGGER.debug("Loading output scanner", scanner=scanner.type, **get_resource_utilization())
-        output_scanners_loaded.append(
+        loaded_output_scanners.append(
             _get_output_scanner(
                 scanner.type,
                 scanner.params,
@@ -69,10 +97,10 @@ def get_output_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[Out
             )
         )
 
-    return output_scanners_loaded
+    return loaded_output_scanners
 
 
-def _configure_model(model: Model, scanner_config: Optional[Dict]):
+def _configure_model(model: Model, scanner_config: Optional[Dict]): 
     if scanner_config is None:
         scanner_config = {}
 
