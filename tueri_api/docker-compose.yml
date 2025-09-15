@@ -18,4 +18,4 @@ services:
       # - CACHE_TTL=3600
     restart: unless-stopped
     volumes:
-      - ./config/scanners.yml:/home/user/app/config/scanners.yml
+      - ./config/app_config.yml:/home/user/app/config/app_config.yml
