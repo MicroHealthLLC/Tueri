@@ -39,7 +39,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 RUN python -m spacy download en_core_web_sm
 
-COPY --chown=user:user tueri_api/config/scanners.yml ./config/scanners.yml
+COPY --chown=user:user tueri_api/config/app_config.yml ./config/app_config.yml
 COPY --chown=user:user tueri_api/entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh

@@ -42,7 +42,7 @@ RUN pip3 install --no-cache-dir --upgrade pip && \
 
 RUN python -m spacy download en_core_web_sm
 
-COPY --chown=user:user ./config/scanners.yml ./config/scanners.yml
+COPY --chown=user:user ./config/app_config.yml ./config/app_config.yml
 COPY --chown=user:user entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh

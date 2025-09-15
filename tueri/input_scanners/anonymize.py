@@ -186,7 +186,7 @@ class Anonymize(Scanner):
                     self._vault.append((placeholder, original_value))
             return (
                 self._preamble + sanitized_prompt,
-                False,
+                True,
                 calculate_risk_score(risk_score, self._threshold),
             )
 

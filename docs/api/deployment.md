@@ -26,7 +26,7 @@ make run
 Or using CLI:
 
 ```bash
-llm_guard_api ./config/scanners.yml
+llm_guard_api ./config/app_config.yml
 ```
 
 ### Using gunicorn
@@ -34,7 +34,7 @@ llm_guard_api ./config/scanners.yml
 In case you want to use `gunicorn` to run the API, you can use the following command:
 
 ```bash
-gunicorn --workers 1 --preload --worker-class uvicorn.workers.UvicornWorker 'app.app:create_app(config_file="./config/scanners.yml")'
+gunicorn --workers 1 --preload --worker-class uvicorn.workers.UvicornWorker 'app.app:create_app(config_file="./config/app_config.yml")'
 ```
 
 It will preload models in the shared memory among workers, which can be useful for performance.
@@ -67,7 +67,7 @@ This will start the API on port 8000. You can now access the API at `http://loca
 If you want to use a custom configuration, you can mount a volume to `/home/user/app/config`:
 
 ```bash
-docker run -d -p 8000:8000 -e APP_WORKERS=1 -e AUTH_TOKEN='my-token' -e LOG_LEVEL='DEBUG' -v ./entrypoint.sh:/home/user/app/entrypoint.sh -v ./config/scanners.yml:/home/user/app/config/scanners.yml laiyer/llm-guard-api:latest
+docker run -d -p 8000:8000 -e APP_WORKERS=1 -e AUTH_TOKEN='my-token' -e LOG_LEVEL='DEBUG' -v ./entrypoint.sh:/home/user/app/entrypoint.sh -v ./config/app_config.yml:/home/user/app/config/app_config.yml laiyer/llm-guard-api:latest
 ```
 
 !!! warning
