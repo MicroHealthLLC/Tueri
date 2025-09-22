@@ -30,7 +30,7 @@ torch.set_num_threads(1)
 
 LOGGER = structlog.getLogger(__name__)
 
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://root:example@localhost:27017/")
+MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://root:example@localhost:27017/")
 MONGO_DB, MONGO_COLLECTION = os.getenv("MONGO_DB", "ChatApp"), os.getenv("MONGO_COLLECTION", "TueriScanners")
 
 # Suppress MongoDB heartbeat logs
@@ -38,7 +38,7 @@ logging.getLogger("pymongo.topology").setLevel(logging.WARNING)
 logging.getLogger("pymongo.serverSelection").setLevel(logging.WARNING)
 
 try:
-    mongo_client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000, heartbeatFrequencyMS=60000)
+    mongo_client = MongoClient(MONGODB_URL, serverSelectionTimeoutMS=5000, heartbeatFrequencyMS=60000)
     db = mongo_client[MONGO_DB]
     scanners_collection = db[MONGO_COLLECTION]
     mongo_client.admin.command("ping")
