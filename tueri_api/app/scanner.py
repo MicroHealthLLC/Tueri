@@ -30,7 +30,7 @@ torch.set_num_threads(1)
 
 LOGGER = structlog.getLogger(__name__)
 
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://root:example@localhost:27017/")
+MONGODB_URL = os.getenv("MONGO_URL", "mongodb://root:example@localhost:27017/")
 MONGO_DB, MONGO_COLLECTION = os.getenv("MONGO_DB", "ChatApp"), os.getenv("MONGO_COLLECTION", "TueriScanners")
 
 # Suppress MongoDB heartbeat logs
