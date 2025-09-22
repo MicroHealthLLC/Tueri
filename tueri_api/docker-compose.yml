@@ -11,7 +11,7 @@ services:
       - APP_WORKERS=1
       - SCAN_FAIL_FAST=true
       - LAZY_LOAD=true
-      - MONGO_URI=mongodb://root:example@host.docker.internal:27017/
+      - MONGO_URL=mongodb://root:example@host.docker.internal:27017/
       - MONGO_DB=ChatApp
       - MONGO_COLLECTION=TueriScanners
       # - CACHE_MAX_SIZE=1000
@@ -19,4 +19,3 @@ services:
     restart: unless-stopped
     volumes:
       - ./config/app_config.yml:/home/user/app/config/app_config.yml
-      
