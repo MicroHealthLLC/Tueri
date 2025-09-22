@@ -11,7 +11,7 @@ services:
       - APP_WORKERS=1
       - SCAN_FAIL_FAST=true
       - LAZY_LOAD=true
-      - MONGO_URL=mongodb://root:example@host.docker.internal:27017/
+      - MONGODB_URL=mongodb://root:example@host.docker.internal:27017/
       - MONGO_DB=ChatApp
       - MONGO_COLLECTION=TueriScanners
       # - CACHE_MAX_SIZE=1000
