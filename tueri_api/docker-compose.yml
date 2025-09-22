@@ -19,3 +19,4 @@ services:
     restart: unless-stopped
     volumes:
       - ./config/app_config.yml:/home/user/app/config/app_config.yml
+      

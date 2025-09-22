@@ -89,8 +89,11 @@ def get_tokenizer_and_model_for_classification(
             model.path,
             subfolder=model.subfolder,
             revision=model.revision,
+            torch_dtype="auto",
+            low_cpu_mem_usage=False,
             **model.kwargs,
         )
+        tf_model = tf_model.to(device())
         LOGGER.debug("Initialized classification model", model=model, device=device())
 
         return tf_tokenizer, tf_model
@@ -124,8 +127,11 @@ def get_tokenizer_and_model_for_ner(
             model.path,
             subfolder=model.subfolder,
             revision=model.revision,
+            torch_dtype="auto",
+            low_cpu_mem_usage=False,
             **model.kwargs,
         )
+        tf_model = tf_model.to(device())
         LOGGER.debug("Initialized NER model", model=model, device=device())
 
         return tf_tokenizer, tf_model

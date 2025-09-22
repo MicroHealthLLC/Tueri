@@ -49,8 +49,8 @@ class FactualConsistency(Scanner):
             model=model,
             use_onnx=use_onnx,
         )
-        self._model = self._model.to(device())
         if not use_onnx:
+            self._model = self._model.to(device())
             self._model.eval()
 
     def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
