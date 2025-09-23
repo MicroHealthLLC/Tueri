@@ -93,7 +93,11 @@ def get_tokenizer_and_model_for_classification(
             low_cpu_mem_usage=False,
             **model.kwargs,
         )
-        tf_model = tf_model.to(device())
+        # Handle meta device properly - use to_empty() when moving from meta device
+        if hasattr(tf_model, 'device') and str(tf_model.device) == 'meta':
+            tf_model = tf_model.to_empty(device=device())
+        else:
+            tf_model = tf_model.to(device())
         LOGGER.debug("Initialized classification model", model=model, device=device())
 
         return tf_tokenizer, tf_model
@@ -131,7 +135,11 @@ def get_tokenizer_and_model_for_ner(
             low_cpu_mem_usage=False,
             **model.kwargs,
         )
-        tf_model = tf_model.to(device())
+        # Handle meta device properly - use to_empty() when moving from meta device
+        if hasattr(tf_model, 'device') and str(tf_model.device) == 'meta':
+            tf_model = tf_model.to_empty(device=device())
+        else:
+            tf_model = tf_model.to(device())
         LOGGER.debug("Initialized NER model", model=model, device=device())
 
         return tf_tokenizer, tf_model
