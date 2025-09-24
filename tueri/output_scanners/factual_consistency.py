@@ -50,7 +50,11 @@ class FactualConsistency(Scanner):
             use_onnx=use_onnx,
         )
         if not use_onnx:
-            self._model = self._model.to(device())
+            # Handle meta device properly - use to_empty() when moving from meta device
+            if hasattr(self._model, 'device') and str(self._model.device) == 'meta':
+                self._model = self._model.to_empty(device=device())
+            else:
+                self._model = self._model.to(device())
             self._model.eval()
 
     def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:

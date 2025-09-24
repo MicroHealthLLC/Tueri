@@ -110,7 +110,12 @@ class Relevance(Scanner):
                 subfolder=model.subfolder,
                 revision=model.revision,
                 **model.kwargs,
-            ).to(device())
+            )
+            # Handle meta device properly - use to_empty() when moving from meta device
+            if hasattr(self._model, 'device') and str(self._model.device) == 'meta':
+                self._model = self._model.to_empty(device=device())
+            else:
+                self._model = self._model.to(device())
             LOGGER.debug("Initialized model", model=model, device=device())
             self._model.eval()
 
