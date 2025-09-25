@@ -127,9 +127,13 @@ def _get_input_scanners_function(config: Config, vault: Vault) -> Callable:
         LOGGER.debug("Loading input scanners from MongoDB")
         scanners = get_input_scanners([], vault)
 
-    def get_cached_scanners() -> List[InputScanner]:
+    def get_cached_scanners(runtime_params: dict = None) -> List[InputScanner]:
         nonlocal scanners
-
+        # If runtime parameters are provided, create new scanner instances
+        if runtime_params:
+            LOGGER.debug("Creating input scanners with overridden parameters", params=runtime_params)
+            return get_input_scanners([], vault, runtime_params)
+        # Otherwise use cached scanners
         if not scanners and config.app.lazy_load:
             LOGGER.debug("Lazy loading input scanners from MongoDB")
             scanners = get_input_scanners([], vault)
@@ -145,9 +149,13 @@ def _get_output_scanners_function(config: Config, vault: Vault) -> Callable:
         LOGGER.debug("Loading output scanners from MongoDB")
         scanners = get_output_scanners([], vault)
 
-    def get_cached_scanners() -> List[OutputScanner]:
+    def get_cached_scanners(runtime_params: dict = None) -> List[OutputScanner]:
         nonlocal scanners
-
+        # If runtime parameters are provided, create new scanner instances
+        if runtime_params:
+            LOGGER.debug("Creating output scanners with overridden parameters", params=runtime_params)
+            return get_output_scanners([], vault, runtime_params)
+        # Otherwise use cached scanners
         if not scanners and config.app.lazy_load:
             LOGGER.debug("Lazy loading output scanners from MongoDB")
             scanners = get_output_scanners([], vault)
@@ -204,14 +212,15 @@ def register_routes(
     async def submit_analyze_output(
         request: AnalyzeOutputRequest,
         _: Annotated[bool, Depends(check_auth)],
-        output_scanners: List[OutputScanner] = Depends(output_scanners_func),
     ) -> AnalyzeOutputResponse:
         LOGGER.debug(
             "Received analyze output request",
             request_prompt=request.prompt,
             request_output=request.output,
         )
-
+        
+        output_scanners = output_scanners_func(request.scanner_params)
+        
         if request.scanners_suppress is not None and len(request.scanners_suppress) > 0:
             LOGGER.debug("Suppressing scanners", scanners=request.scanners_suppress)
             output_scanners = [
@@ -269,13 +278,14 @@ def register_routes(
     async def submit_scan_output(
         request: ScanOutputRequest,
         _: Annotated[bool, Depends(check_auth)],
-        output_scanners: List[OutputScanner] = Depends(output_scanners_func),
     ) -> ScanOutputResponse:
         LOGGER.debug(
             "Received scan output request",
             request_prompt=request.prompt,
             request_output=request.output,
         )
+
+        output_scanners = output_scanners_func(request.scanner_params)
 
         if request.scanners_suppress is not None and len(request.scanners_suppress) > 0:
             LOGGER.debug("Suppressing scanners", scanners=request.scanners_suppress)
@@ -340,9 +350,10 @@ def register_routes(
         request: AnalyzePromptRequest,
         _: Annotated[bool, Depends(check_auth)],
         response: Response,
-        input_scanners: List[InputScanner] = Depends(input_scanners_func),
     ) -> AnalyzePromptResponse:
         LOGGER.debug("Received analyze prompt request", request_prompt=request.prompt)
+
+        input_scanners = input_scanners_func(request.scanner_params)
 
         if request.scanners_suppress is not None and len(request.scanners_suppress) > 0:
             LOGGER.debug("Suppressing scanners", scanners=request.scanners_suppress)
@@ -401,9 +412,10 @@ def register_routes(
     async def submit_scan_prompt(
         request: ScanPromptRequest,
         _: Annotated[bool, Depends(check_auth)],
-        input_scanners: List[InputScanner] = Depends(input_scanners_func),
     ) -> ScanPromptResponse:
         LOGGER.debug("Received scan prompt request", request_prompt=request.prompt)
+
+        input_scanners = input_scanners_func(request.scanner_params)
 
         if request.scanners_suppress is not None and len(request.scanners_suppress) > 0:
             LOGGER.debug("Suppressing scanners", scanners=request.scanners_suppress)

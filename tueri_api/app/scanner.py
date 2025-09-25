@@ -62,18 +62,19 @@ def _fetch_scanners_from_mongo(scanner_type: str) -> List[ScannerConfig]:
             params=scanner.get("params", {})))
     return scanners
 
-def get_input_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[InputScanner]: 
-    """
-    Load input scanners from MongoDB.
-    """
+def get_input_scanners(scanners: List[ScannerConfig], vault: Vault, runtime_params: Optional[Dict[str, Dict]] = None) -> List[InputScanner]:
+    """Load input scanners from MongoDB."""
     input_scanners_config = _fetch_scanners_from_mongo("input")
     loaded_input_scanners: List[InputScanner] = []
     for scanner in input_scanners_config:
-        LOGGER.debug("Loading input scanner", scanner=scanner.type, **get_resource_utilization())
+        scanner_params = scanner.params.copy() if scanner.params else {}
+        if runtime_params and scanner.type in runtime_params:
+            scanner_params.update(runtime_params[scanner.type])
+            # LOGGER.debug("overriding parameters", scanner=scanner.type, overrides=runtime_params[scanner.type])
         loaded_input_scanners.append(
             _get_input_scanner(
                 scanner.type,
-                scanner.params,
+                scanner_params,
                 vault=vault,
             )
         )
@@ -81,18 +82,19 @@ def get_input_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[Inpu
     return loaded_input_scanners
 
 
-def get_output_scanners(scanners: List[ScannerConfig], vault: Vault) -> List[OutputScanner]:
-    """
-    Load output scanners from MongoDB.
-    """
+def get_output_scanners(scanners: List[ScannerConfig], vault: Vault, runtime_params: Optional[Dict[str, Dict]] = None) -> List[OutputScanner]:
+    """Load output scanners from MongoDB."""
     output_scanners_config = _fetch_scanners_from_mongo("output")
     loaded_output_scanners: List[OutputScanner] = []
     for scanner in output_scanners_config:
-        LOGGER.debug("Loading output scanner", scanner=scanner.type, **get_resource_utilization())
+        scanner_params = scanner.params.copy() if scanner.params else {}
+        if runtime_params and scanner.type in runtime_params:
+            scanner_params.update(runtime_params[scanner.type])
+            # LOGGER.debug("overriding parameters", scanner=scanner.type, overrides=runtime_params[scanner.type])
         loaded_output_scanners.append(
             _get_output_scanner(
                 scanner.type,
-                scanner.params,
+                scanner_params,
                 vault=vault,
             )
         )
