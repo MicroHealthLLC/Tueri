@@ -129,11 +129,9 @@ def _get_input_scanners_function(config: Config, vault: Vault) -> Callable:
 
     def get_cached_scanners(runtime_params: dict = None) -> List[InputScanner]:
         nonlocal scanners
-        # If runtime parameters are provided, create new scanner instances
         if runtime_params:
             LOGGER.debug("Creating input scanners with overridden parameters", params=runtime_params)
             return get_input_scanners([], vault, runtime_params)
-        # Otherwise use cached scanners
         if not scanners and config.app.lazy_load:
             LOGGER.debug("Lazy loading input scanners from MongoDB")
             scanners = get_input_scanners([], vault)
@@ -151,11 +149,9 @@ def _get_output_scanners_function(config: Config, vault: Vault) -> Callable:
 
     def get_cached_scanners(runtime_params: dict = None) -> List[OutputScanner]:
         nonlocal scanners
-        # If runtime parameters are provided, create new scanner instances
         if runtime_params:
             LOGGER.debug("Creating output scanners with overridden parameters", params=runtime_params)
             return get_output_scanners([], vault, runtime_params)
-        # Otherwise use cached scanners
         if not scanners and config.app.lazy_load:
             LOGGER.debug("Lazy loading output scanners from MongoDB")
             scanners = get_output_scanners([], vault)
