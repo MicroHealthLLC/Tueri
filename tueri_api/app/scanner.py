@@ -24,6 +24,7 @@ from tueri.output_scanners.relevance import MODEL_EN_BGE_SMALL as RELEVANCE_MODE
 from tueri.vault import Vault
 
 from .config import ScannerConfig
+from .scanner_cache import get_scanner_cache_manager
 from .util import get_resource_utilization
 
 torch.set_num_threads(1)
@@ -63,41 +64,78 @@ def _fetch_scanners_from_mongo(scanner_type: str) -> List[ScannerConfig]:
     return scanners
 
 def get_input_scanners(scanners: List[ScannerConfig], vault: Vault, runtime_params: Optional[Dict[str, Dict]] = None) -> List[InputScanner]:
-    """Load input scanners from MongoDB."""
+    """Load input scanners from MongoDB"""
     input_scanners_config = _fetch_scanners_from_mongo("input")
     loaded_input_scanners: List[InputScanner] = []
-    for scanner in input_scanners_config:
-        scanner_params = scanner.params.copy() if scanner.params else {}
-        if runtime_params and scanner.type in runtime_params:
-            scanner_params.update(runtime_params[scanner.type])
-            # LOGGER.debug("overriding parameters", scanner=scanner.type, overrides=runtime_params[scanner.type])
-        loaded_input_scanners.append(
-            _get_input_scanner(
+
+    # use caching when runtime parameters are provided
+    if runtime_params:
+        scanner_cache = get_scanner_cache_manager()
+        for scanner in input_scanners_config:
+            scanner_params = scanner.params.copy() if scanner.params else {}
+            if scanner.type in runtime_params:
+                scanner_params.update(runtime_params[scanner.type])
+                LOGGER.debug("overriding parameters", scanner=scanner.type, overrides=runtime_params[scanner.type])
+
+            def scanner_factory(scanner_type: str, params: dict) -> InputScanner:
+                return _get_input_scanner(scanner_type, params, vault=vault)
+
+            cached_scanner = scanner_cache.get_input_scanner(
                 scanner.type,
                 scanner_params,
-                vault=vault,
+                scanner_factory
             )
-        )
+            loaded_input_scanners.append(cached_scanner)
+            
+    else:
+        for scanner in input_scanners_config:
+            scanner_params = scanner.params.copy() if scanner.params else {}
+            loaded_input_scanners.append(
+                _get_input_scanner(
+                    scanner.type,
+                    scanner_params,
+                    vault=vault,
+                )
+            )
 
     return loaded_input_scanners
 
 
 def get_output_scanners(scanners: List[ScannerConfig], vault: Vault, runtime_params: Optional[Dict[str, Dict]] = None) -> List[OutputScanner]:
-    """Load output scanners from MongoDB."""
+    """Load output scanners from MongoDB"""
     output_scanners_config = _fetch_scanners_from_mongo("output")
     loaded_output_scanners: List[OutputScanner] = []
-    for scanner in output_scanners_config:
-        scanner_params = scanner.params.copy() if scanner.params else {}
-        if runtime_params and scanner.type in runtime_params:
-            scanner_params.update(runtime_params[scanner.type])
-            # LOGGER.debug("overriding parameters", scanner=scanner.type, overrides=runtime_params[scanner.type])
-        loaded_output_scanners.append(
-            _get_output_scanner(
+
+    # use caching when runtime parameters are provided
+    if runtime_params:
+        scanner_cache = get_scanner_cache_manager()
+
+        for scanner in output_scanners_config:
+            scanner_params = scanner.params.copy() if scanner.params else {}
+            if scanner.type in runtime_params:
+                scanner_params.update(runtime_params[scanner.type])
+                LOGGER.debug("overriding parameters", scanner=scanner.type, overrides=runtime_params[scanner.type])
+
+            def scanner_factory(scanner_type: str, params: dict) -> OutputScanner:
+                return _get_output_scanner(scanner_type, params, vault=vault)
+
+            cached_scanner = scanner_cache.get_output_scanner(
                 scanner.type,
                 scanner_params,
-                vault=vault,
+                scanner_factory
             )
-        )
+            loaded_output_scanners.append(cached_scanner)
+            
+    else:
+        for scanner in output_scanners_config:
+            scanner_params = scanner.params.copy() if scanner.params else {}
+            loaded_output_scanners.append(
+                _get_output_scanner(
+                    scanner.type,
+                    scanner_params,
+                    vault=vault,
+                )
+            )
 
     return loaded_output_scanners
 
